@@ -1,12 +1,17 @@
 ko = require 'knockout'
 api = require '../../api'
-ExerciseList = require '@tutor/exercise-editor'
+ExerciseEditor = require '@tutor/exercise-editor'
 
-class ViewModel extends ExerciseList(ko)
+class ViewModel extends ExerciseEditor(ko).ExercisePageViewModel
+  constructor: (params) ->
+    super(params)
+
   show: (id) -> window.location.hash = '#exercise/' + id
-  getExercises: api.get.exercises
 
+  getExercise: (id, callback) ->
+    api.get.exercise id, callback
 
+  @getExercises
 fs = require 'fs'
 module.exports = ->
   ko.components.register __filename.substr(__dirname.length, __filename.length - 7),

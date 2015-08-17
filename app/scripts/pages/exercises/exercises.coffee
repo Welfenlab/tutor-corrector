@@ -2,10 +2,16 @@ ko = require 'knockout'
 api = require '../../api'
 ExerciseList = require('@tutor/exercise-list')(ko)
 
+class ExerciseViewModel extends ExerciseList.ExerciseViewModel
+  constructor: (data) ->
+    super(data)
+
+  show: -> window.location.hash = '#exercise/' + @id
+
 class ViewModel extends ExerciseList.OverviewPageViewModel
-  show: (id) -> window.location.hash = '#exercise/' + id
   getExercises: api.get.exercises
 
+  createExerciseViewModel: (e) -> new ExerciseViewModel(e)
 
 fs = require 'fs'
 module.exports = ->

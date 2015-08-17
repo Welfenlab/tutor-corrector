@@ -1,14 +1,11 @@
 ko = require 'knockout'
 require 'knockout-mapping'
 api = require './api'
-#overview = './pages/overview'
-#editor = './pages/exercise_editor'
 #not_found = './pages/not_found'
 fs = require 'fs'
 login = require '@tutor/login-form'
 i18n = require('i18next-ko')
 
-#ko.components.register 'page-exercise-editor', editor ko
 ko.components.register 'page-not-found', template: "<h2>Page not found</h2>"
 
 viewModel =
@@ -34,11 +31,11 @@ viewModel =
       path: 'overview'
       component: require('./pages/exercises/exercises')()
     },
-    # {
-    #   path: /exercise\/?(.*)/
-    #   as: ['id'] #name the parameters
-    #   component: 'page-exercise-editor'
-    # }
+    {
+      path: /exercise\/?(.*)/
+      as: ['id'] #name the parameters
+      component: require('./pages/editor/editor')()
+    }
   ]
 
 rename = (array, names) ->
