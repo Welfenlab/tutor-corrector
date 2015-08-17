@@ -1,0 +1,25 @@
+<div class="login">
+  <div class="ui segment form centered">
+    <div class="field">
+      <label data-bind="i18n: 'login.username'"></label>
+      <div class="ui icon input">
+        <input type="text" data-bind="textInput: username" />
+        <i class="user icon"></i>
+      </div>
+    </div>
+    <div class="field">
+      <label data-bind="i18n: 'login.password'"></label>
+      <div class="ui icon input">
+        <input type="password" data-bind="textInput: password" />
+        <i class="lock icon"></i>
+      </div>
+    </div>
+    <div class="ui submit button" data-bind="css: { disabled: !mayLogin() }, click: login, i18n: 'login.submit'"></div>
+
+    <!-- ko if: isLoggingIn -->
+      <div class="ui active dimmer">
+        <div class="ui loader"></div>
+      </div>
+    <!-- /ko -->
+  </div>
+</div>
