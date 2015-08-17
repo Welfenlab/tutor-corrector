@@ -6,23 +6,9 @@ api = require './api'
 #not_found = './pages/not_found'
 fs = require 'fs'
 login = require '@tutor/login-form'
-exerciseList = require '@tutor/exercise-list'
-editor = require './editor'
 i18n = require('i18next-ko')
 
-ko.components.register 'login-form', login ko,
-  html: (fs.readFileSync __dirname + '/pages/login.html').toString()
-  username: 'demo'
-  password: 'demo'
-  redirect: '/#overview'
-  validate: (username, password) -> username isnt '' and password isnt ''
-  authorize: api.post.login
-
-ko.components.register 'exercise-list', exerciseList ko,
-  html: (fs.readFileSync __dirname + '/pages/exerciseList.html').toString()
-  show: (id) -> window.location.hash = '#exercise/' + id
-  getExercises: api.get.exercises
-ko.components.register 'page-exercise-editor', editor ko
+#ko.components.register 'page-exercise-editor', editor ko
 ko.components.register 'page-not-found', template: "<h2>Page not found</h2>"
 
 viewModel =
@@ -38,20 +24,21 @@ viewModel =
   selected: ko.observable()
   parameters: ko.observable {}
   path: ko.observable()
+
   pages: [
     {
       path: 'login'
-      component: 'login-form'
+      component: require('./pages/login/login')()
     },
     {
       path: 'overview'
-      component: 'exercise-list'
+      component: require('./pages/exercises/exercises')()
     },
-    {
-      path: /exercise\/?(.*)/
-      as: ['id'] #name the parameters
-      component: 'page-exercise-editor'
-    }
+    # {
+    #   path: /exercise\/?(.*)/
+    #   as: ['id'] #name the parameters
+    #   component: 'page-exercise-editor'
+    # }
   ]
 
 rename = (array, names) ->
@@ -60,7 +47,6 @@ rename = (array, names) ->
     obj[names[i]] = item
   return obj
 
-console.log require '../i18n/en'
 i18n.init {
   en:
     translation: require '../i18n/en'
