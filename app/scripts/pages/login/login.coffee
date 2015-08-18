@@ -1,4 +1,6 @@
 ko = require 'knockout'
+app = require '../../app'
+api = require '../../api'
 
 class ViewModel
   constructor: ->
@@ -8,8 +10,19 @@ class ViewModel
     @mayLogin = ko.computed =>  @username isnt '' and @password isnt ''
     @isLoggingIn = ko.observable no
 
-  login: ->
+    @error = ko.observable null
+    @hasError = ko.computed => @error() isnt null
 
+  login: ->
+    @isLoggingIn yes
+    api.post.login @username(), @password()
+    .always =>
+      @isLoggingIn no
+    .done (data) =>
+        app.user data
+        app.router.goto 'overview'
+    .fail (jqxhr) =>
+        @error jqxhr.responseJSON.msg
 
 fs = require 'fs'
 module.exports = ->
