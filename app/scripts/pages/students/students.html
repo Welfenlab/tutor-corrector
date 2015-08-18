@@ -1,0 +1,76 @@
+<div class="ui segment">
+  <!-- ko ifnot: studentSelected -->
+  <div class="ui form">
+    <div class="inline field">
+      <label>Matrikelnummern-Suche</label>
+      <input type="text" data-bind="textInput: searchInput" />
+    </div>
+  </div>
+  <table class="ui table">
+    <thead>
+      <tr>
+        <th>Matrikelnummer</th>
+        <th>Punktestand</th>
+        <th>Gruppe</th>
+        <th>Editieren</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- ko foreach: displayedStudents -->
+      <tr>
+        <td data-bind="text: number"></td>
+        <td>376/500</td>
+        <td>&ndash;</td>
+        <td><div data-bind="click: function(){ $parent.selectedStudent($data); }" class="compact ui icon blue button"><i class="edit icon"></i></div></td>
+      </tr>
+      <!-- /ko -->
+      <!-- ko if: displayedStudents().length == 0 -->
+      <tr>
+        <td colspan="4" class="center aligned">Es wurden keine Studenten gefunden.</td>  
+      </tr>
+      <!-- /ko -->
+    </tbody>
+  </table>
+  <!-- /ko -->
+  <!-- ko if: studentSelected -->
+  <div class="ui right icon button"  data-bind="click: function(){ $data.selectedStudent(null); }">
+    <i class="arrow left icon"></i>
+  </div>
+  <h4 class="ui horizontal header divider">
+    <i class="user icon"></i>
+    Student <span data-bind="text: selectedStudent.number"></span>
+  </h4>
+  <div class="ui cards">
+    <div class="ui card">
+      <div class="content">
+        <div class="header">Übung 1</div>
+        <div class="description">
+          <div class="ui header huge important">
+            <b>60 </b>
+            <span style="color:lightgray">/ 100</span>
+          </div>
+        </div>
+      </div>
+      <div class="ui bottom attached blue button">
+        <i class="edit icon"></i>
+        Bearbeiten
+      </div>
+    </div>
+    <div class="ui card">
+      <div class="content">
+        <div class="header">Übung 2</div>
+        <div class="description">
+          <div class="ui header huge important">
+            <b>77 </b>
+            <span style="color:lightgray">/ 100</span>
+          </div>
+        </div>
+      </div>
+      <div class="ui bottom attached blue button">
+        <i class="edit icon"></i>
+        Bearbeiten
+      </div>
+    </div>
+  </div>
+  <!-- /ko -->
+</div>

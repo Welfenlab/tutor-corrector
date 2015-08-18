@@ -8,7 +8,11 @@ app.router.pages [
   }
   {
     path: 'overview'
-    component: require('./pages/exercises/exercises')()
+    component: require('./pages/overview/overview')()
+  }
+  {
+    path: 'students'
+    component: require('./pages/students/students')()
   }
   {
     path: /exercise\/?(.*)/
