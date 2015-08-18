@@ -1,20 +1,21 @@
 app = require './app'
 ko = require 'knockout'
 
-app.router.pages
-    {
-      path: 'login'
-      component: require('./pages/login/login')()
-    }
-    {
-      path: 'overview'
-      component: require('./pages/exercises/exercises')()
-    }
-    {
-      path: /exercise\/?(.*)/
-      as: ['id'] #name the parameters
-      component: require('./pages/editor/editor')()
-    }
+app.router.pages [
+  {
+    path: 'login'
+    component: require('./pages/login/login')()
+  }
+  {
+    path: 'overview'
+    component: require('./pages/exercises/exercises')()
+  }
+  {
+    path: /exercise\/?(.*)/
+    as: ['id'] #name the parameters
+    component: require('./pages/editor/editor')()
+  }
+]
 
 app.router.goto 'login'
 
