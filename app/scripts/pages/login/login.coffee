@@ -7,7 +7,7 @@ class ViewModel
     @username = ko.observable ''
     @password = ko.observable ''
 
-    @mayLogin = ko.computed =>  @username isnt '' and @password isnt ''
+    @mayLogin = ko.computed =>  @username() isnt '' and @password() isnt ''
     @isLoggingIn = ko.observable no
 
     @error = ko.observable null
