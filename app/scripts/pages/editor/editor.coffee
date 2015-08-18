@@ -11,7 +11,6 @@ class ViewModel extends ExerciseEditor(ko).ExercisePageViewModel
   getExercise: (id, callback) ->
     api.get.exercise id, callback
 
-  @getExercises
 fs = require 'fs'
 module.exports = ->
   ko.components.register __filename.substr(__dirname.length, __filename.length - 7),
