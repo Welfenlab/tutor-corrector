@@ -30,7 +30,9 @@
     "knockout": "^3.3.0",
     "knockout-mapping": "^2.5.0",
     "lodash": "^3.10.1",
-    "more-markdown": "^0.1.1"
+    "more-markdown": "^0.1.1",
+    "pdfjs-dist": "^1.1.387",
+    "sketch.js": "lemaik/sketch.js#1.0.1"
   },
   "devDependencies": {
     "brfs": "^1.4.0",

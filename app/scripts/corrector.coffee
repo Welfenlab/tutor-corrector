@@ -15,6 +15,10 @@ app.router.pages [
     component: require('./pages/students/students')()
   }
   {
+    path: 'correction'
+    component: require('./pages/correction/correction')()
+  }
+  {
     path: /exercise\/?(.*)/
     as: ['id'] #name the parameters
     component: require('./pages/editor/editor')()
