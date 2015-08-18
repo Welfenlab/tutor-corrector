@@ -6,17 +6,17 @@ ajax = (method, url, data) ->
     data: data
     method: method
 
-get = (u, d, c) -> ajax 'GET', u, d
-put = (u, d, c) -> ajax 'PUT', u, d
-post = (u, d, c) -> ajax 'POST', u, d
-del = (u, d, c) -> ajax 'DELETE', u, d
+get = ajax.bind undefined, 'GET'
+put = ajax.bind undefined, 'PUT'
+post = ajax.bind undefined, 'POST'
+del = ajax.bind undefined, 'DELETE'
 
 api =
   get:
-    exercises: (c) -> get('/exercises', c)
-    exercise: (id, c) -> get("/exercises/#{id}", c)
+    exercises: -> get('/exercises')
+    exercise: (id) -> get("/exercises/#{id}")
   put:
-    exercise: (id, content, c) -> put "/exercises/#{id}", content
+    exercise: (id, content) -> put "/exercises/#{id}", content
   post:
     login: (username, password) -> post "/login",
         username: username,
