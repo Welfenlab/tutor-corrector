@@ -1,6 +1,6 @@
 ko = require 'knockout'
-PDFJS = require 'pdfjs-dist/build/pdf'
-PDFJS.workerSrc = require 'pdfjs-dist/build/pdf.worker.js'
+require 'pdfjs-dist/build/pdf.combined' #defines PDFJS globaly
+#PDFJS.workerSrc = false
 sketchjs = require 'sketch.js'
 api = require '../../api'
 
@@ -9,7 +9,17 @@ class ViewModel
     if not $? then console.error 'No jQuery defined'
     if not $.fn.sketch then sketchjs($)
 
-    PDFJS.getDocument('./pdf-sample.pdf').then (pdf) =>
+    @pageCount = ko.observable 0
+    @page = ko.observable 0
+    @imgData = ko.observable ''
+
+    $('#correctionCanvas').sketch()
+    @sketch = $('#correctionCanvas').sketch()
+    window.addEventListener 'resize', => @resize()
+
+    PDFJS.getDocument('http://localhost:8080/scripts/pages/correction/pdf-sample.pdf').then (pdf) =>
+      @pageCount pdf.numPages
+
       pdf.getPage(1).then (page) =>
         #create an off-screen canvas for rendering the pdf
         canvas = document.createElement('canvas')
@@ -21,13 +31,15 @@ class ViewModel
         canvas.height = viewport.height
 
         #render the page and put it into an image
-        page.render({canvasContext: ctx, viewport: viewport}).then ->
-          data = canvas.toDataURL()
+        page.render({canvasContext: ctx, viewport: viewport}).then =>
+          @imgData canvas.toDataURL()
           canvas.remove()
-          img = new Image()
-          img.onload = ->
-            callback img
-          img.src = data
+          @resize()
+
+  resize: ->
+    $('#correctionPage').height($('#correctionBg').height())
+    $('#correctionCanvas').height($('#correctionBg').height())
+
 
 fs = require 'fs'
 module.exports = ->

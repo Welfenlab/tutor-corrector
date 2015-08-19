@@ -195,3 +195,26 @@ login-form {
   min-width: 10px!important;
   height: 5px;
 }
+
+.correction {
+  position: relative;
+  width:100%;
+  max-width: 1000px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  margin: 0 auto;
+
+  canvas, img {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+  }
+
+  canvas {
+    z-index: 2;
+  }
+
+  img {
+    z-index: 1;
+  }
+}

@@ -18,11 +18,6 @@ app.router.pages [
     path: 'correction'
     component: require('./pages/correction/correction')()
   }
-  {
-    path: /exercise\/?(.*)/
-    as: ['id'] #name the parameters
-    component: require('./pages/editor/editor')()
-  }
 ]
 
 app.router.goto 'login'
