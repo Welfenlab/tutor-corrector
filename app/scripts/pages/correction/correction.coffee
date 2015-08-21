@@ -11,7 +11,7 @@ class ViewModel
 
     @pageCount = ko.observable 0
     @page = ko.observable 0
-    @imgData = ko.observable ''
+    @pageWidth = 0
 
     $('#correctionCanvas').sketch()
     @sketch = $('#correctionCanvas').sketch()
@@ -29,17 +29,25 @@ class ViewModel
         viewport = page.getViewport(2.0) #2.0 is the zoom level
         canvas.width = viewport.width
         canvas.height = viewport.height
+        @pageWidth = viewport.width
+        @pageHeight = viewport.height
 
         #render the page and put it into an image
         page.render({canvasContext: ctx, viewport: viewport}).then =>
-          @imgData canvas.toDataURL()
+          pdfImage = new Image()
+          pdfImage.onload = =>
+            @sketch.background = pdfImage
+            @resize()
+          pdfImage.src = canvas.toDataURL()
           canvas.remove()
-          @resize()
 
   resize: ->
-    $('#correctionPage').height($('#correctionBg').height())
-    $('#correctionCanvas').height($('#correctionBg').height())
-
+    actualWidth = $('#correctionPage').width()
+    $('#correctionPage').height actualWidth / @pageWidth * @pageHeight
+    $('#correctionCanvas').attr
+      height: actualWidth / @pageWidth * @pageHeight
+      width: actualWidth
+    @sketch.setScale actualWidth / @pageWidth
 
 fs = require 'fs'
 module.exports = ->
