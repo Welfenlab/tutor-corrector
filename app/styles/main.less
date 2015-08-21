@@ -197,24 +197,22 @@ login-form {
 }
 
 .correction {
-  position: relative;
-  width:100%;
-  max-width: 1000px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  margin: 0 auto;
-
-  canvas, img {
-    position: absolute;
-    width: 100%;
-    top: 0;
-    left: 0;
+  .toolbar {
+    margin: 0 0 15px;
   }
 
-  canvas {
-    z-index: 2;
-  }
+  #correctionPage {
+    position: relative;
+    width:100%;
+    max-width: 1000px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    margin: 0 auto;
 
-  img {
-    z-index: 1;
+    canvas {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+    }
   }
 }

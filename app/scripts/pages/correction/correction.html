@@ -1,9 +1,41 @@
-<div>
-  <a href="#correctionCanvas" data-tool="marker" data-size="5" data-color="#f00">Marker</a>
-  <a href="#correctionCanvas" data-tool="highlighter" data-color="#ff0" data-size="20">Highlighter</a>
-  <a href="#correctionCanvas" data-tool="text" data-size="50">Text</a>
-  <div class="correction" id="correctionPage">
-    <a href="correctionCanvas" data-tool="marker" data-size="5">Marker</a>
+<div class="correction">
+  <div class="toolbar">
+    <div class="ui icon buttons">
+      <button class="ui button"
+              data-bind="click: tool.bind($data, 'marker'), css: { active: tool() == 'marker'}">
+        <i class="write icon"></i>
+      </button>
+      <button class="ui button"
+              data-bind="click: tool.bind($data, 'highlighter'), css: { active: tool() == 'highlighter'}">
+      <i class="paint brush icon"></i>
+      </button>
+      <button class="ui button"
+              data-bind="click: tool.bind($data, 'text'), css: { active: tool() == 'text'}">
+      <i class="font icon"></i>
+      </button>
+      <button class="ui button"
+              data-bind="click: tool.bind($data, 'eraser'), css: { active: tool() == 'eraser'}">
+        <i class="erase icon"></i>
+      </button>
+    </div>
+
+    <div class="ui buttons">
+      <button class="ui basic red button"
+              data-bind="click: color.bind($data, '#f00'), css: { active: color() == '#f00'}">
+              Red
+      </button>
+      <button class="ui basic yellow button"
+              data-bind="click: color.bind($data, '#ff0'), css: { active: color() == '#ff0'}">
+              Yellow
+      </button>
+      <button class="ui basic green button"
+              data-bind="click: color.bind($data, '#0f0'), css: { active: color() == '#0f0'}">
+              Green
+      </button>
+    </div>
+  </div>
+
+  <div id="correctionPage">
     <canvas id="correctionCanvas"></canvas>
   </div>
 </div>

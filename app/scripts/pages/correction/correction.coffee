@@ -17,6 +17,27 @@ class ViewModel
     @sketch = $('#correctionCanvas').sketch()
     window.addEventListener 'resize', => @resize()
 
+    @color = ko.observable()
+    @color.subscribe (v) =>
+      @sketch.set 'color', v
+
+    @tool = ko.observable()
+    @tool.subscribe (v) =>
+      @sketch.set 'tool', v
+      switch v
+        when 'marker'
+          @sketch.set 'size', 5
+          @color '#f00'
+        when 'highlighter'
+          @sketch.set 'size', 20
+          @color '#ff0'
+        when 'text'
+          @sketch.set 'size', 20
+          @color '#f00'
+        else
+          @sketch.set 'size', 5
+    @tool 'marker'
+
     PDFJS.getDocument('http://localhost:8080/scripts/pages/correction/pdf-sample.pdf').then (pdf) =>
       @pageCount pdf.numPages
 
