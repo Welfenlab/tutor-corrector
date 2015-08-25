@@ -32,7 +32,7 @@
     "lodash": "^3.10.1",
     "more-markdown": "^0.1.1",
     "pdfjs-dist": "^1.1.387",
-    "sketch.js": "^1.1.0"
+    "sketch.js": "^1.1.1"
   },
   "devDependencies": {
     "brfs": "^1.4.0",
