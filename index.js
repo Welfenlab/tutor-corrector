@@ -1,30 +1,41 @@
 
 var config = require("cson").load("config.cson");
 var TutorServer = require("@tutor/server");
-var MemDB = require("@tutor/memory-database")(config);
 var express = require("express");
-var open = require("open")
 
-restAPI = require("./src/rest")(MemDB);
 
-config.modules = [
-  require("@tutor/dummy-auth"),
-];
+config.modules = []
+var restAPI = null;
 
-if(config.development){
-  config.modules.push(function(app, config){
-    app.use(express.static('./build'));
+var startServer = function(restAPI){
+  // load logging modules
+  require("./src/logging")(config);
+
+  // additional server modules for all environments
+  config.modules = config.modules.concat([
+    require('@tutor/share-ace-rethinkdb'),
+  ]);
+
+  // create the server
+  var server = TutorServer(config);
+
+  // register rest API
+  restAPI.forEach(function(rest){
+    server.createRestCall(rest);
   });
+
+  // start the server
+  server.start();
 }
 
-// create a server
-var server = TutorServer(config);
+var starter;
+// initialize the appropiate environment
+if(process.env.NODE_ENV != "production"){
+  starter = require("./src/development")(config);
+} else {
+  starter = require("./src/production")(config);
+}
 
-// register rest API
-restAPI.forEach(function(rest){
-  server.createRestCall(rest);
+starter.then(startServer).catch(function(e){
+  console.error(e);
 });
-
-// start the server
-server.start();
-open("http://localhost:8080");
