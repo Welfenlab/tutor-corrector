@@ -1,0 +1,258 @@
+
+swagger: '2.0'
+
+info:
+  version: "0.1.1"
+  title: Tutor Student REST API
+
+host: localhost:8080
+basePath: /api
+
+paths:
+  /exercises:
+    get:
+      description: "Returns all exercises that are currently visible to the student."
+      responses:
+        200:
+          description: Returns an array of exercise objects
+
+          schema:
+            title: ArrayOfExercises
+            type: array
+            items:
+              title: Exercise
+              type: object
+              properties:
+                number:
+                  type: number
+                activationDate:
+                  type: string
+                  format: ISO-8601
+                dueDate:
+                  type: string
+                  format: ISO-8601
+                id:
+                  type: string
+                  format: uuid
+                tasks:
+                  type: array
+                  items:
+                    title: Task ID
+                    type: string
+                    format: uuid
+                title:
+                  type: string
+  /exercises/detailed:
+    get:
+      description: "Returns an exercise containg the task information."
+      parameters:
+        - name: exercise
+          in: path
+          description: The exercise id
+          required: true
+          type: string
+          format: UUID
+      responses:
+        200:
+          description: An array of exercise objects
+          schema:
+            title: ArrayOfExercises
+            type: array
+            items:
+              title: Exercise
+              type: object
+              properties:
+                number:
+                  type: number
+                activationDate:
+                  type: string
+                  format: ISO-8601
+                dueDate:
+                  type: string
+                  format: ISO-8601
+                id:
+                  type: string
+                  format: uuid
+                tasks:
+                  type: array
+                  items:
+                    title: Task ID
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      number:
+                        type: string
+                      title:
+                        type: string
+                      text:
+                        type: string
+                        format: markdown
+                      maxPoinbts:
+                        type: number
+
+                title:
+                  type: string
+  /correction:
+    get:
+      description: Gets the status of the correction process for all exercises
+      responses:
+        200:
+          description: The request returned the status successfully
+          schema:
+            title: StatusArray
+            type: array
+            items:
+              title: Status
+              type: Object
+              properties:
+                exercise:
+                  type: string
+                  format: UUID
+                solutions:
+                  type: number
+                corrected:
+                  type: number
+                locked:
+                  type: number
+  /correction/pending:
+    get:
+      description: Get all pending solutions that still need correction. This excludes already locked exercises
+      parameters:
+        - name: exercise
+          in: path
+          description: The exercise id
+          required: true
+          type: string
+          format: UUID
+      responses:
+        200:
+          description: The number of pending solutions is returned
+          schema:
+            type: number
+  /correction/store:
+    put:
+      description: Stores a result for a solution. This does not expose the result to the students, it simply stores it in the data storage. Use finalize to mark a result as official.
+      parameters:
+        - name: id
+          in: body
+          description: The id of the solution
+          required: true
+          type: string
+          format: UUID
+        - name: results
+          in: body
+          description: The result object
+          required: true
+          type: object
+      responses:
+        204:
+          description: The result was stored in the solution.
+        404:
+          description: The solution could not be found or be associated with the tutor and thus it was not able to store the result. Check the solution id or if the solution is locked.
+  /correction/finish:
+    push:
+      description: Finalize the results. These are then visible to the students. The result is stored via /correction/store. It will complain if there is no result stored for the exercise
+      parameters:
+        - name: id
+          in: body
+          description: The id of the solution
+          required: true
+          type: string
+          format: UUID
+      responses:
+        204:
+          description: The result was finalized and is now published
+        404:
+          description: The solution or the result was not found. It could not complete this operation.
+  /correction/unfinished:
+    get:
+      description: Get all unfinished, but locked, solutions for a tutor.
+      responses:
+        200:
+          description: A list of solutions with all their information.
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: UUID
+              exercise:
+                type: string
+                format: UUID
+              group:
+                type: string
+                format: UUID
+              lock:
+                type: string
+              inProcess:
+                type: bool
+              results:
+                type: object
+              pdf:
+                type: string
+                format: URL
+  /correction/finished:
+    get:
+      description: Get all unfinished, but locked, solutions for a tutor.
+      responses:
+        200:
+          description: A list of solutions with all their information.
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: UUID
+              exercise:
+                type: string
+                format: UUID
+              group:
+                type: string
+                format: UUID
+              lock:
+                type: string
+              inProcess:
+                type: bool
+              results:
+                type: object
+              pdf:
+                type: string
+                format: URL
+  /correction/next:
+    get:
+      description: Get the next solution for correction. This is a randomly chosen not yet locked solution. It locks the solution for the tutor and makes it inaccessible to the other tutors. After that the solution is listed in /correction/unfinished
+      parameters:
+        - name: exercise
+          in: path
+          description: The exercise id
+          required: true
+          type: string
+          format: UUID
+      responses:
+        200:
+          description: A solution was locked and returned.
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: UUID
+              exercise:
+                type: string
+                format: UUID
+              group:
+                type: string
+                format: UUID
+              lock:
+                type: string
+              inProcess:
+                type: bool
+              results:
+                type: object
+              pdf:
+                type: string
+                format: URL
+      404:
+        description: No lockable solution was found. That means that all solutions are assigned. But it is possible that there are solutions listed in /correction/unfinished that still need to be finalized.
