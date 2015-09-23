@@ -13,7 +13,6 @@ var startServer = function(restAPI){
 
   // additional server modules for all environments
   config.modules = config.modules.concat([
-    require('@tutor/share-ace-rethinkdb'),
   ]);
 
   // create the server
