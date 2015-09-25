@@ -2,7 +2,7 @@
 module.exports = function(DB){
   return [
     { path: '/api/exercises', dataCall: DB.Exercises.get, apiMethod: "get" },
-    { path: '/api/exercises/detailed/:id', dataCall: DB.Exercises.getDetailed, apiMethod: "getByParam", param: "id", errStatus: 404  },
+    { path: '/api/exercises/:id', dataCall: DB.Exercises.getById, apiMethod: "getByParam", param: "id", errStatus: 404  },
 
     { path: '/api/correction/pending/:id', dataCall: DB.Corrections.getNumPending,
       apiMethod: "getByParam", param: "id", errStatus: 404  },
