@@ -1,5 +1,22 @@
 ko = require 'knockout'
 api = require '../../api'
+_ = require 'lodash'
+
+class ExerciseCard
+  constructor: (data) ->
+    _.merge this, ko.mapping.fromJS(data)
+    console.log this
+    @number = Math.random() * 42 | 0
+    @dueDate = new Date(data.dueDate || 0)
+    @formattedDueDate = @dueDate.toLocaleDateString()
+    @isDue = ko.computed => @dueDate.getTime() < new Date().getTime()
+    @isCorrected = ko.computed => @corrected() > @solutions()
+    @contingent =
+      should: 42
+      is: 21
+    @contingent.ratio = @contingent.is / @contingent.should
+
+  correct: -> window.location.hash = "#exercise/#{@exercise()}"
 
 class ViewModel
   constructor: ->
@@ -9,18 +26,8 @@ class ViewModel
     .then (data) =>
       number = 1
       @exercises data.map (exercise) ->
-        vm = ko.mapping.fromJS(exercise)
-        vm.number = number++
-        vm.dueDate = new Date()
-        vm.formattedDueDate = vm.dueDate.toLocaleDateString()
-        vm.isDue = ko.computed -> vm.dueDate.getTime() < new Date().getTime()
-        vm.isCorrected = vm.corrected() > vm.solutions()
-        vm.contingent =
-          should: 42
-          is: 21
-        vm.contingent.ratio = vm.contingent.is / vm.contingent.should
-
-        return vm
+        exercise.number = number++
+        new ExerciseCard(exercise)
     .catch (e) -> console.log e
 
 fs = require 'fs'
