@@ -21,7 +21,7 @@
     "@tutor/javascript-editor-errors": "^0.1.2",
     "@tutor/login-form": "^0.1.1",
     "@tutor/markdown-editor": "^0.1.3",
-    "@tutor/rethinkdb-database": "^0.2.6",
+    "@tutor/rethinkdb-database": "^0.2.7",
     "@tutor/server": "^0.2.3",
     "bunyan": "^1.5.1",
     "cson": "^3.0.1",
@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@tutor/dummy-auth": "^0.1.5",
-    "@tutor/memory-database": "^0.4.7",
+    "@tutor/memory-database": "^0.4.8",
     "brfs": "^1.4.0",
     "browserify": "^11.0.1",
     "browserify-shim": "^3.8.10",
