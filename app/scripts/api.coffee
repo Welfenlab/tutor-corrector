@@ -16,11 +16,12 @@ api =
   get:
     exercises: -> get('/exercises')
     exercise: (id) -> get("/exercises/#{id}")
+    overview: -> get('/correction')
   put:
     exercise: (id, content) -> put "/exercises/#{id}", content
   post:
     login: (username, password) -> post "/login",
-        username: username,
+        id: username,
         password: password
 
 module.exports = api
