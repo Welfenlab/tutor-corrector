@@ -15,6 +15,11 @@ class ViewModel
         vm.formattedDueDate = vm.dueDate.toLocaleDateString()
         vm.isDue = ko.computed -> vm.dueDate.getTime() < new Date().getTime()
         vm.isCorrected = vm.corrected() > vm.solutions()
+        vm.contingent =
+          should: 42
+          is: 21
+        vm.contingent.ratio = vm.contingent.is / vm.contingent.should
+
         return vm
     .catch (e) -> console.log e
 

@@ -3,16 +3,18 @@
     <!-- ko foreach: exercises -->
     <div class="ui card">
       <div class="content">
-        <div class="ui red right ribbon label" style="margin-top:-10px!important;">
+        <div class="ui red right ribbon label" style="margin-top:-10px!important;" data-bind="visible: contingent.ratio < 0.25">
           <i class="frown icon"></i>
-          ? / ?  erledigt
+          <span data-bind="text: contingent.is"></span> / <span data-bind="text: contingent.should"></span> erledigt
         </div>
-        <!--<div class="ui right orange ribbon label">
-          <i class="meh icon"></i> 30 / 45 erledigt!
+        <div class="ui inverted orange right ribbon label" style="margin-top:-10px!important;" data-bind="visible: contingent.ratio < 1 && contingent.ratio >= 0.25">
+          <i class="meh icon"></i>
+          <span data-bind="text: contingent.is"></span> / <span data-bind="text: contingent.should"></span> erledigt
         </div>
-        <div class="ui green right ribbon label">
-          <i class="smile icon"></i> 45 / 45 erledigt!
-        </div>-->
+        <div class="ui green right ribbon label" style="margin-top:-10px!important;" data-bind="visible: contingent.ratio == 1">
+          <i class="smile icon"></i>
+          <span data-bind="text: contingent.is"></span> / <span data-bind="text: contingent.should"></span> erledigt
+        </div>
         <div class="header">Übung <span data-bind="text: number"></span></div>
         <div class="meta">Frist: <span data-bind="text: formattedDueDate"></span></div>
         <div class="description">
