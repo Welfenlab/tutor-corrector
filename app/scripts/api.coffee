@@ -1,7 +1,8 @@
 address = 'http://localhost:8080/api'
+Q = require 'q'
 
 ajax = (method, url, data) ->
-  $.ajax
+  Q $.ajax
     url: address + url
     data: data
     method: method
