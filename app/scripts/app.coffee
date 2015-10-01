@@ -2,6 +2,7 @@ ko = require 'knockout'
 require 'knockout-mapping'
 #not_found = './pages/not_found'
 i18n = require 'i18next-ko'
+md5 = require 'md5'
 Router = require './router'
 api = require './api'
 
@@ -16,13 +17,22 @@ class ViewModel
     .then (me) =>
       @user ko.mapping.fromJS me
       @router.goto location.hash.substr(1) #go to the page the user wants to go to
-    .catch (e) => @router.goto 'login'
+    .catch (e) =>
+      @router.goto 'login'
 
-    @isLoggedIn = ko.computed => @user()? and @user().pseudonym?
+    @isLoggedIn = ko.computed => @user()? and @user().name?
+    @avatarUrl = ko.computed =>
+      if @isLoggedIn() then "http://www.gravatar.com/avatar/#{md5(@user().name())}?d=wavatar&f=y"
 
     @availableLanguages = ['en']
     @language = ko.observable 'en'
     @language.subscribe (v) -> i18n.setLanguage v
+
+  logout:
+    api.post.logout()
+    .then =>
+      @user {}
+      @router.goto 'login'
 
 i18n.init {
   en:

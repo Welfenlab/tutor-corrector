@@ -24,5 +24,6 @@ api =
     login: (username, password) -> post "/login",
         id: username,
         password: password
+    logout: -> post '/logout'
 
 module.exports = api
