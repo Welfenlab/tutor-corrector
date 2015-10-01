@@ -3,24 +3,30 @@ require 'knockout-mapping'
 #not_found = './pages/not_found'
 i18n = require 'i18next-ko'
 Router = require './router'
+api = require './api'
 
 ko.components.register 'page-not-found', template: "<h2>Page not found</h2>"
 
-viewModel =
-  user: ko.observable({
-    name: 'Jon Doe'
-    avatar: 'http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y&d=monsterid'
-  })
+class ViewModel
+  constructor: ->
+    @router = new Router()
 
-  availableLanguages: ['en']
-  language: ko.observable 'en'
+    @user = ko.observable {}
+    api.get.me()
+    .then (me) =>
+      @user ko.mapping.fromJS me
+      @router.goto location.hash.substr(1) #go to the page the user wants to go to
+    .catch (e) => @router.goto 'login'
 
-  router: new Router()
+    @isLoggedIn = ko.computed => @user()? and @user().pseudonym?
+
+    @availableLanguages = ['en']
+    @language = ko.observable 'en'
+    @language.subscribe (v) -> i18n.setLanguage v
 
 i18n.init {
   en:
     translation: require '../i18n/en'
   }, 'en', ko
-viewModel.language.subscribe (v) -> i18n.setLanguage v
 
-module.exports = viewModel
+module.exports = new ViewModel()

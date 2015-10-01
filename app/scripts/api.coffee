@@ -17,6 +17,7 @@ api =
     exercises: -> get('/exercises')
     exercise: (id) -> get("/exercises/#{id}")
     overview: -> get('/correction')
+    me: -> get('/tutor')
   put:
     exercise: (id, content) -> put "/exercises/#{id}", content
   post:

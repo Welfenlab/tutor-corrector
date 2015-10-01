@@ -1,25 +1,26 @@
-<div class="login">
-  <div class="ui segment form centered">
-    <div class="field">
-      <label data-bind="i18n: 'login.username'"></label>
-      <div class="ui icon input">
-        <input type="text" data-bind="textInput: username" />
-        <i class="user icon"></i>
+<div class="ui middle aligned center aligned grid">
+  <div class="column login">
+    <h2 class="ui teal image header">
+      <i class="ui student icon"></i>
+      <div class="content">Log-in to your account</div>
+    </h2>
+    <div class="ui large form">
+      <div class="ui piled segment">
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            <input type="text" data-bind="textInput: username, i18n: { placeholder: 'login.username' }" />
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" data-bind="textInput: password, i18n: { placeholder: 'login.password' }" />
+          </div>
+        </div>
+        <div class="ui fluid large teal submit button"
+             data-bind="css: { disabled: !mayLogin(), loading: isLoggingIn }, click: login, i18n: 'login.submit'"></div>
       </div>
     </div>
-    <div class="field">
-      <label data-bind="i18n: 'login.password'"></label>
-      <div class="ui icon input">
-        <input type="password" data-bind="textInput: password" />
-        <i class="lock icon"></i>
-      </div>
-    </div>
-    <div class="ui submit button" data-bind="css: { disabled: !mayLogin() }, click: login, i18n: 'login.submit'"></div>
-
-    <!-- ko if: isLoggingIn -->
-      <div class="ui active dimmer">
-        <div class="ui loader"></div>
-      </div>
-    <!-- /ko -->
   </div>
 </div>

@@ -16,13 +16,15 @@ class ViewModel
   login: ->
     @isLoggingIn yes
     api.post.login @username(), @password()
-    .then =>
+    .then -> api.get.me()
+    .then (data) =>
       @isLoggingIn no
       app.user data
       app.router.goto 'overview'
-    .catch (jqxhr) =>
+    .catch (e) =>
+      console.log e
       @isLoggingIn no
-      @error jqxhr.responseJSON.msg
+      $('.login').transition('shake')
 
 fs = require 'fs'
 module.exports = ->
