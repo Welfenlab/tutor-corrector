@@ -4,8 +4,8 @@ api = require '../../api'
 
 class ViewModel
   constructor: ->
-    @username = ko.observable 'ABC-DEF'
-    @password = ko.observable 'p455w02d'
+    @username = ko.observable 'max'
+    @password = ko.observable 'abc'
 
     @mayLogin = ko.computed =>  @username() isnt '' and @password() isnt ''
     @isLoggingIn = ko.observable no

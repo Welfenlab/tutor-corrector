@@ -7,8 +7,13 @@ module.exports = function(config){
 
   restAPI = require("./rest")(MemDB);
 
+  var tutorExists = function(name) {
+    return MemDB.Users.getTutor(name).then(function(user) {
+      return user != null;
+    });
+  };
   config.modules = []
-  config.modules.push(require("@tutor/dummy-auth")(MemDB.Users.exists));
+  config.modules.push(require("@tutor/dummy-auth")(tutorExists));
   config.domainname = "tutor-corrector.gdv.uni-hannover.de"
   //config.modules.push(require("@tutor/saml"));
 
