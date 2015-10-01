@@ -28,7 +28,7 @@ class ViewModel
     @language = ko.observable 'en'
     @language.subscribe (v) -> i18n.setLanguage v
 
-  logout:
+  logout: ->
     api.post.logout()
     .then =>
       @user {}
