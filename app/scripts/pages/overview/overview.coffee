@@ -5,11 +5,10 @@ _ = require 'lodash'
 class ExerciseCard
   constructor: (data) ->
     _.merge this, ko.mapping.fromJS(data)
-    console.log this
-    @number = Math.random() * 42 | 0
-    @dueDate = new Date(data.dueDate || 0)
-    @formattedDueDate = @dueDate.toLocaleDateString()
-    @isDue = ko.computed => @dueDate.getTime() < new Date().getTime()
+
+    @dueDate = ko.computed => new Date(@exercise.dueDate())
+    @formattedDueDate = ko.computed => @dueDate().toLocaleDateString()
+    @isDue = ko.computed => @dueDate().getTime() < new Date().getTime()
     @isCorrected = ko.computed => @corrected() > @solutions()
     @contingent =
       should: 42
