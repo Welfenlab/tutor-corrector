@@ -2,16 +2,16 @@
   <div class="ui cards">
     <!-- ko foreach: exercises -->
     <div class="ui card">
-      <div class="content">
-        <div class="ui red right ribbon label" style="margin-top:-10px!important;" data-bind="visible: contingent.ratio < 0.25">
+      <div class="ui content">
+        <div class="ui red top right attached basic label" data-bind="visible: contingent.ratio < 0.25">
           <i class="frown icon"></i>
           <span data-bind="text: contingent.is"></span> / <span data-bind="text: contingent.should"></span> erledigt
         </div>
-        <div class="ui inverted orange right ribbon label" style="margin-top:-10px!important;" data-bind="visible: contingent.ratio < 1 && contingent.ratio >= 0.25">
+        <div class="ui orange top right attached basic label" data-bind="visible: contingent.ratio < 1 && contingent.ratio >= 0.25">
           <i class="meh icon"></i>
           <span data-bind="text: contingent.is"></span> / <span data-bind="text: contingent.should"></span> erledigt
         </div>
-        <div class="ui green right ribbon label" style="margin-top:-10px!important;" data-bind="visible: contingent.ratio == 1">
+        <div class="ui green top right attached basic label" data-bind="visible: contingent.ratio == 1">
           <i class="smile icon"></i>
           <span data-bind="text: contingent.is"></span> / <span data-bind="text: contingent.should"></span> erledigt
         </div>

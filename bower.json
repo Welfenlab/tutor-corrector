@@ -18,7 +18,7 @@
   "dependencies": {
     "ace": "~1.1.9",
     "jailed": "~0.2.0",
-    "semantic-ui": "~2.0.2",
+    "semantic-ui": "~2.1.4",
     "highlightjs": "~8.7.0"
   }
 }
