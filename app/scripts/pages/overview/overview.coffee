@@ -11,8 +11,8 @@ class ExerciseCard
     @isDue = ko.computed => @dueDate().getTime() < new Date().getTime()
     @isCorrected = ko.computed => @corrected() > @solutions()
     @contingent =
-      should: 42
-      is: 21
+      should: data.should
+      is: data.is
     @contingent.ratio = @contingent.is / @contingent.should
 
   correct: -> window.location.hash = "#exercise/#{@exercise()}"
@@ -26,6 +26,8 @@ class ViewModel
       number = 1
       @exercises data.map (exercise) ->
         exercise.number = number++
+        exercise.is = exercise.is
+        exercise.should = exercise.should
         new ExerciseCard(exercise)
     .catch (e) -> console.log e
 
