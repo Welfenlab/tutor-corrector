@@ -34,6 +34,9 @@ class ViewModel
       @user {}
       @router.goto 'login'
 
+  registerPopup: ->
+    $('.button').popup(position: 'bottom right', hoverable: true)
+
 i18n.init {
   en:
     translation: require '../i18n/en'
