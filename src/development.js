@@ -1,4 +1,6 @@
 var express = require("express");
+var bcrypt = require("bcrypt-then");
+var _ = require("lodash");
 
 // initialize the development environment
 module.exports = function(config){
@@ -7,13 +9,11 @@ module.exports = function(config){
 
   restAPI = require("./rest")(MemDB);
 
-  var tutorExists = function(name) {
-    return MemDB.Users.getTutor(name).then(function(user) {
-      return user != null;
-    });
+  var tutorAuth = function(name, pw) {
+    return MemDB.Users.authTutor(name, _.partial(bcrypt.compare,pw));
   };
   config.modules = []
-  config.modules.push(require("@tutor/dummy-auth")(tutorExists));
+  config.modules.push(require("@tutor/dummy-auth")(tutorAuth));
   config.domainname = "tutor-corrector.gdv.uni-hannover.de"
   //config.modules.push(require("@tutor/saml"));
 
