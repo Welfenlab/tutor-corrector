@@ -189,8 +189,24 @@ body {
 }
 
 .correction {
+  position: relative;
+
   .toolbar {
-    margin: 0 0 15px;
+    position: fixed;
+    left: 1rem;
+    &, & > .buttons {
+      transition: box-shadow 500ms ease, left 500ms ease;
+    }
+
+    &.floating {
+      z-index: 42;
+      left: ~"calc(1rem + 20px)";
+
+      & > .buttons {
+        border-radius: .28571429rem;
+        box-shadow: 0 0 5px #333;
+      }
+    }
   }
 
   #correctionPage {
@@ -199,6 +215,7 @@ body {
     max-width: 1000px;
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
     margin: 0 auto;
+    margin-top: 46px;
 
     canvas {
       position: absolute;

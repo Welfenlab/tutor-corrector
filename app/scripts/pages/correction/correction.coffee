@@ -33,6 +33,12 @@ class ViewModel
       else if event.keyCode == 89 and event.ctrlKey #Ctrl+Y
         @redo()
 
+    $(document).on 'scroll.correction', (event) ->
+      if $(window).scrollTop() > 0
+        $('.correction .toolbar').addClass 'floating'
+      else
+        $('.correction .toolbar').removeClass 'floating'
+
     $('#correctionCanvas').scribble()
     @scribble = $('#correctionCanvas').scribble()
 
