@@ -4,10 +4,6 @@ require 'pdfjs-dist/build/pdf.combined' #defines PDFJS globaly
 scribblejs = require 'scribble.js'
 api = require '../../api'
 
-host = window.location.host.toString().split(":");
-port = host[1].split("/")[0];
-address = 'http://'+host[0]+':'+port+'/'
-
 class ViewModel
   constructor: (params) ->
     if not $? then console.error 'No jQuery defined'
@@ -20,6 +16,7 @@ class ViewModel
     @tool = ko.observable()
     @canUndo = ko.observable no
     @canRedo = ko.observable no
+    @exercise = ko.observable params.id
 
   onShow: =>
     $('#correctionCanvas')
@@ -68,7 +65,7 @@ class ViewModel
     @tool 'marker'
 
     #TODO get PDF of exercise with ID params.id
-    PDFJS.getDocument(address + 'api/correction/pdf/' + params.id).then (pdf) =>
+    PDFJS.getDocument(api.urlOf.pdf(@exercise())).then (pdf) =>
       @pageCount pdf.numPages
 
       pdf.getPage(1).then (page) =>

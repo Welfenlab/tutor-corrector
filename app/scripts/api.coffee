@@ -1,6 +1,6 @@
 host = window.location.host.toString().split(":");
 port = host[1].split("/")[0];
-address = 'http://'+host[0]+':'+port+'/api'
+address = "http://#{host[0]}:#{port}/api"
 Q = require 'q'
 
 ajax = (method, url, data) ->
@@ -28,5 +28,7 @@ api =
         id: username,
         password: password
     logout: -> post '/logout'
+  urlOf:
+    pdf: (id) -> "#{address}/correction/pdf/#{id}"
 
 module.exports = api
