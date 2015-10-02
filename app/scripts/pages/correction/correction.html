@@ -33,6 +33,17 @@
               Green
       </button>
     </div>
+
+    <div class="ui icon buttons">
+      <button class="ui button" title="Undo (Ctrl+Z)"
+              data-bind="click: undo, css: { disabled: !canUndo()}">
+        <i class="undo icon"></i>
+      </button>
+      <button class="ui button" title="Redo (Ctrl+Y, Ctrl+Shift+Z)"
+              data-bind="click: redo, css: { disabled: !canRedo()}">
+        <i class="repeat icon"></i>
+      </button>
+    </div>
   </div>
 
   <div id="correctionPage">

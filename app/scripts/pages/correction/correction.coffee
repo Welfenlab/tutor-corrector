@@ -1,41 +1,51 @@
 ko = require 'knockout'
 require 'pdfjs-dist/build/pdf.combined' #defines PDFJS globaly
 #PDFJS.workerSrc = false
-sketchjs = require 'sketch.js'
+scribblejs = require 'scribble.js'
 api = require '../../api'
 
 class ViewModel
   constructor: (params) ->
     if not $? then console.error 'No jQuery defined'
-    if not $.fn.sketch then sketchjs($)
+    if not $.fn.scribble then scribblejs($)
 
     @pageCount = ko.observable 0
     @page = ko.observable 0
     @pageWidth = 0
 
-    $('#correctionCanvas').sketch()
-    @sketch = $('#correctionCanvas').sketch()
+    $('#correctionCanvas').scribble()
+    @scribble = $('#correctionCanvas').scribble()
     window.addEventListener 'resize', => @resize()
 
     @color = ko.observable()
     @color.subscribe (v) =>
-      @sketch.set 'color', v
+      @scribble.set 'color', v
+
+    @canUndo = ko.observable no
+    @canRedo = ko.observable no
+    @undo = => @scribble.undo()
+    @redo = => @scribble.redo()
+    $('#correctionCanvas')
+    .on 'scribble:undoAvailable', => @canUndo yes
+    .on 'scribble:undoUnavailable', => @canUndo no
+    .on 'scribble:redoAvailable', => @canRedo yes
+    .on 'scribble:redoUnavailable', => @canRedo no
 
     @tool = ko.observable()
     @tool.subscribe (v) =>
-      @sketch.set 'tool', v
+      @scribble.set 'tool', v
       switch v
         when 'marker'
-          @sketch.set 'size', 5
+          @scribble.set 'size', 5
           @color '#f00'
         when 'highlighter'
-          @sketch.set 'size', 20
+          @scribble.set 'size', 20
           @color '#ff0'
         when 'text'
-          @sketch.set 'size', 20
+          @scribble.set 'size', 20
           @color '#f00'
         else
-          @sketch.set 'size', 5
+          @scribble.set 'size', 5
     @tool 'marker'
 
     #TODO get PDF of exercise with ID params.id
@@ -58,7 +68,7 @@ class ViewModel
         page.render({canvasContext: ctx, viewport: viewport}).then =>
           pdfImage = new Image()
           pdfImage.onload = =>
-            @sketch.background = pdfImage
+            @scribble.background = pdfImage
             @resize()
           pdfImage.src = canvas.toDataURL()
           canvas.remove()
@@ -69,7 +79,7 @@ class ViewModel
     $('#correctionCanvas').attr
       height: actualWidth / @pageWidth * @pageHeight
       width: actualWidth
-    @sketch.setScale actualWidth / @pageWidth
+    @scribble.setScale actualWidth / @pageWidth
 
 fs = require 'fs'
 module.exports = ->
