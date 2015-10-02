@@ -32,7 +32,9 @@
     "lodash": "^3.10.1",
     "md5": "^2.0.0",
     "more-markdown": "^0.1.1",
-    "q": "^1.4.1"
+    "q": "^1.4.1",
+    "pdfjs-dist": "^1.1.387",
+    "sketch.js": "^1.1.1"
   },
   "devDependencies": {
     "@tutor/dummy-auth": "^0.1.5",
