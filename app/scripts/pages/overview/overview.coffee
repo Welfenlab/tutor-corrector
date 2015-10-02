@@ -15,7 +15,7 @@ class ExerciseCard
       is: data.is
     @contingent.ratio = @contingent.is / @contingent.should
 
-  correct: -> window.location.hash = "#exercise/#{@exercise.id()}"
+  correct: -> window.location.hash = "#correction/#{@exercise.id()}"
 
 class ViewModel
   constructor: ->

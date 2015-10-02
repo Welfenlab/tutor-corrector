@@ -5,7 +5,7 @@ sketchjs = require 'sketch.js'
 api = require '../../api'
 
 class ViewModel
-  constructor: ->
+  constructor: (params) ->
     if not $? then console.error 'No jQuery defined'
     if not $.fn.sketch then sketchjs($)
 
@@ -38,6 +38,7 @@ class ViewModel
           @sketch.set 'size', 5
     @tool 'marker'
 
+    #TODO get PDF of exercise with ID params.id
     PDFJS.getDocument('http://localhost:8080/scripts/pages/correction/pdf-sample.pdf').then (pdf) =>
       @pageCount pdf.numPages
 
