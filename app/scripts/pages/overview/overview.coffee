@@ -11,7 +11,7 @@ class ExerciseCard
     @isDue = ko.computed => @dueDate().getTime() < new Date().getTime()
     @isCorrected = ko.computed => @corrected() > @solutions()
     @contingent =
-      should: data.should
+      should: Math.ceil data.should #TODO why does the server even send fractions here?
       is: data.is
     @contingent.ratio = @contingent.is / @contingent.should
 

@@ -6,7 +6,7 @@ module.exports = function(DB){
 
     { path: '/api/correction/pending/:id', dataCall: DB.Corrections.getNumPending,
       apiMethod: "getByParam", param: "id", errStatus: 404  },
-    { path: '/api/correction', dataCall: DB.Corrections.getStatus, apiMethod: "get" },
+    { path: '/api/correction', dataCall: DB.Corrections.getStatus, apiMethod: "getBySessionUID" },
     { path: '/api/correction/next/:id', dataCall: DB.Corrections.lockNextSolutionForTutor,
       apiMethod: "getBySessionUIDAndParam", param: "id", errStatus: 404 },
     { path: '/api/correction/finish', dataCall: DB.Corrections.finishSolution,
