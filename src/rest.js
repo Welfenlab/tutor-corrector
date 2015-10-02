@@ -28,6 +28,8 @@ module.exports = function(DB){
 
     { path: '/api/tutor', dataCall: DB.Users.getTutor, apiMethod: "getBySessionUID" },
 
+    { path: '/api/solutions/by/user/:id', dataCall: DB.Exercises.getUserSolutions,
+      apiMethod: "getByParam", param: "user" },
     { path: '/api/solution/:id', dataCall: DB.Exercises.getExerciseSolution,
       apiMethod: "getBySessionUIDAndParam", param: "id", errStatus: 404 },
   ];
