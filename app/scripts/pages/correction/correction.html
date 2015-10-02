@@ -20,16 +20,16 @@
     </div>
 
     <div class="ui buttons">
-      <button class="ui basic red button"
-              data-bind="click: color.bind($data, '#f00'), css: { active: color() == '#f00'}">
+      <button class="ui button"
+              data-bind="click: color.bind($data, '#f00'), css: { red: color() == '#f00'}">
               Red
       </button>
-      <button class="ui basic yellow button"
-              data-bind="click: color.bind($data, '#ff0'), css: { active: color() == '#ff0'}">
+      <button class="ui button"
+              data-bind="click: color.bind($data, '#ff0'), css: { yellow: color() == '#ff0'}">
               Yellow
       </button>
-      <button class="ui basic green button"
-              data-bind="click: color.bind($data, '#0f0'), css: { active: color() == '#0f0'}">
+      <button class="ui button"
+              data-bind="click: color.bind($data, '#0f0'), css: { green: color() == '#0f0'}">
               Green
       </button>
     </div>
