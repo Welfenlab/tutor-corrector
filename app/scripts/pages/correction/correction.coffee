@@ -31,6 +31,15 @@ class ViewModel
     .on 'scribble:redoAvailable', => @canRedo yes
     .on 'scribble:redoUnavailable', => @canRedo no
 
+    $(document).on 'keydown.correction', (event) =>
+      if event.keyCode == 90 and event.ctrlKey #Ctrl+Z
+        if event.shiftKey #Ctrl+Shift+Z
+          @redo()
+        else
+          @undo()
+      else if event.keyCode == 89 and event.ctrlKey #Ctrl+Y
+        @redo()
+
     @tool = ko.observable()
     @tool.subscribe (v) =>
       @scribble.set 'tool', v
