@@ -34,7 +34,7 @@
     "more-markdown": "^0.1.1",
     "pdfjs-dist": "^1.1.387",
     "q": "^1.4.1",
-    "scribble.js": "lemaik/scribble.js#v1.2.0"
+    "scribble.js": "lemaik/scribble.js#v1.2.1"
   },
   "devDependencies": {
     "@tutor/dummy-auth": "^0.1.5",
