@@ -11,9 +11,9 @@ class ExerciseCard
     @isDue = ko.computed => @dueDate().getTime() < new Date().getTime()
     @isCorrected = ko.computed => @corrected() > @solutions()
     @contingent =
-      should: Math.ceil data.should #TODO why does the server even send fractions here?
+      should: '~' + Math.ceil data.should #TODO remove tilde once this value is exact (see issue #1)
       is: data.is
-    @contingent.ratio = @contingent.is / @contingent.should
+    @contingent.ratio = @contingent.is / Math.ceil data.should
 
   correct: -> window.location.hash = "#correction/#{@exercise.id()}"
 
@@ -23,9 +23,7 @@ class ViewModel
 
     api.get.overview()
     .then (data) =>
-      number = 1
       @exercises data.map (exercise) ->
-        exercise.number = number++
         exercise.is = exercise.is
         exercise.should = exercise.should
         new ExerciseCard(exercise)
