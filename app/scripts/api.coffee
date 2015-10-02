@@ -1,4 +1,6 @@
-address = 'http://localhost:8080/api'
+host = window.location.host.toString().split(":");
+port = host[1].split("/")[0];
+address = 'http://'+host[0]+':'+port+'/api'
 Q = require 'q'
 
 ajax = (method, url, data) ->
@@ -18,6 +20,7 @@ api =
     exercise: (id) -> get("/exercises/#{id}")
     overview: -> get('/correction')
     me: -> get('/tutor')
+    pdf: (id) -> get("/correction/pdf/#{id}")
   put:
     exercise: (id, content) -> put "/exercises/#{id}", content
   post:
