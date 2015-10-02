@@ -12,24 +12,17 @@ class ViewModel
     @pageCount = ko.observable 0
     @page = ko.observable 0
     @pageWidth = 0
-
-    $('#correctionCanvas').scribble()
-    @scribble = $('#correctionCanvas').scribble()
-    window.addEventListener 'resize', => @resize()
-
     @color = ko.observable()
-    @color.subscribe (v) =>
-      @scribble.set 'color', v
-
+    @tool = ko.observable()
     @canUndo = ko.observable no
     @canRedo = ko.observable no
-    @undo = => @scribble.undo()
-    @redo = => @scribble.redo()
+
+  onShow: =>
     $('#correctionCanvas')
-    .on 'scribble:undoAvailable', => @canUndo yes
-    .on 'scribble:undoUnavailable', => @canUndo no
-    .on 'scribble:redoAvailable', => @canRedo yes
-    .on 'scribble:redoUnavailable', => @canRedo no
+    .on 'scribble:undoAvailable.correction', => @canUndo yes
+    .on 'scribble:undoUnavailable.correction', => @canUndo no
+    .on 'scribble:redoAvailable.correction', => @canRedo yes
+    .on 'scribble:redoUnavailable.correction', => @canRedo no
 
     $(document).on 'keydown.correction', (event) =>
       if event.keyCode == 90 and event.ctrlKey #Ctrl+Z
@@ -40,7 +33,14 @@ class ViewModel
       else if event.keyCode == 89 and event.ctrlKey #Ctrl+Y
         @redo()
 
-    @tool = ko.observable()
+    $('#correctionCanvas').scribble()
+    @scribble = $('#correctionCanvas').scribble()
+
+    $(window).on 'resize.correction', => @resize()
+
+    @color.subscribe (v) =>
+      @scribble.set 'color', v
+
     @tool.subscribe (v) =>
       @scribble.set 'tool', v
       switch v
@@ -81,6 +81,14 @@ class ViewModel
             @resize()
           pdfImage.src = canvas.toDataURL()
           canvas.remove()
+
+  onHide: ->
+    $('#correctionCanvas').off '.correction'
+    $(window).off '.correction'
+    $(document).off '.correction'
+
+  undo: -> @scribble.undo()
+  redo: -> @scribble.redo()
 
   resize: ->
     actualWidth = $('#correctionPage').width()
