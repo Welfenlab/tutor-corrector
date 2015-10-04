@@ -2,6 +2,7 @@ ko = require 'knockout'
 require 'pdfjs-dist/build/pdf.combined' #defines PDFJS globaly
 #PDFJS.workerSrc = false
 scribblejs = require 'scribble.js'
+Q = require 'q'
 api = require '../../api'
 
 class ViewModel
@@ -9,9 +10,8 @@ class ViewModel
     if not $? then console.error 'No jQuery defined'
     if not $.fn.scribble then scribblejs($)
 
-    @pageCount = ko.observable 0
-    @page = ko.observable 0
-    @pageWidth = 0
+    @pages = ko.observableArray()
+    @pageCount = ko.computed => @pages().length
     @color = ko.observable()
     @tool = ko.observable()
     @canUndo = ko.observable no
@@ -40,54 +40,74 @@ class ViewModel
       else
         $('.correction .toolbar').removeClass 'floating'
 
-    $('#correctionCanvas').scribble()
-    @scribble = $('#correctionCanvas').scribble()
+    # $('#correctionCanvas').scribble()
+    # @scribble = $('#correctionCanvas').scribble()
 
     $(window).on 'resize.correction', => @resize()
 
     @color.subscribe (v) =>
-      @scribble.set 'color', v
+      for page in @pages()
+        page.scribble.set 'color', v
 
     @tool.subscribe (v) =>
-      @scribble.set 'tool', v
-      switch v
-        when 'marker'
-          @scribble.set 'size', 5
-          @color '#f00'
-        when 'highlighter'
-          @scribble.set 'size', 20
-          @color '#ff0'
-        when 'text'
-          @scribble.set 'size', 20
-          @color '#f00'
-        else
-          @scribble.set 'size', 5
+      for page in @pages()
+        page.scribble.set 'tool', v
+        switch v
+          when 'marker'
+            page.scribble.set 'size', 5
+            @color '#f00'
+          when 'highlighter'
+            page.scribble.set 'size', 20
+            @color '#ff0'
+          when 'text'
+            page.scribble.set 'size', 20
+            @color '#f00'
+          else
+            page.scribble.set 'size', 5
     @tool 'marker'
 
-    #TODO get PDF of exercise with ID params.id
-    PDFJS.getDocument(api.urlOf.pdf(@exercise())).then (pdf) =>
-      @pageCount pdf.numPages
+    PDFJS.getDocument(api.urlOf.pdf(@exercise()))
+    .then (pdf) =>
+      Q.all(
+        for pageNo in [1..pdf.numPages]
+          pdf.getPage(pageNo).then (page) ->
+            #create an off-screen canvas for rendering the pdf
+            canvas = document.createElement('canvas')
+            ctx = canvas.getContext('2d')
 
-      pdf.getPage(1).then (page) =>
-        #create an off-screen canvas for rendering the pdf
-        canvas = document.createElement('canvas')
-        ctx = canvas.getContext('2d')
+            #get pdf size and set canvas size accordingly
+            viewport = page.getViewport(2.0) #2.0 is the zoom level
+            canvas.width = viewport.width
+            canvas.height = viewport.height
 
-        #get pdf size and set canvas size accordingly
-        viewport = page.getViewport(2.0) #2.0 is the zoom level
-        canvas.width = viewport.width
-        canvas.height = viewport.height
-        @pageWidth = viewport.width
-        @pageHeight = viewport.height
+            #render the page and put it into an image
+            page.render({canvasContext: ctx, viewport: viewport}).then ->
+              deferred = Q.defer()
+              pdfImage = new Image()
+              pdfImage.onload = =>
+                deferred.resolve
+                  image: pdfImage
+                  pageNo: pageNo
+                  width: pdfImage.width
+                  height: pdfImage.height
+              pdfImage.src = canvas.toDataURL()
+              canvas.remove()
+              return deferred.promise
+      )
+    .then (pages) =>
+      pages.sort (a, b) -> a.pageNo - b.pageNo
+      @pages pages
+      @resize()
 
-        #render the page and put it into an image
-        page.render({canvasContext: ctx, viewport: viewport}).then =>
-          pdfImage = new Image()
-          pdfImage.onload = =>
-            @scribble.background = pdfImage
-            @resize()
-          pdfImage.src = canvas.toDataURL()
-          canvas.remove()
+  registerCanvas: (page, element) ->
+    canvas = $(element)
+    canvas.scribble()
+    page.canvas = canvas
+    page.scribble = canvas.scribble() #second scribble() call returns the scribble instance
+    page.scribble.background = page.image
+
+  unregisterCanvas: (element) ->
+    canvas = $(element)
 
   onHide: ->
     $('#correctionCanvas').off '.correction'
@@ -98,12 +118,13 @@ class ViewModel
   redo: -> @scribble.redo()
 
   resize: ->
-    actualWidth = $('#correctionPage').width()
-    $('#correctionPage').height actualWidth / @pageWidth * @pageHeight
-    $('#correctionCanvas').attr
-      height: actualWidth / @pageWidth * @pageHeight
-      width: actualWidth
-    @scribble.setScale actualWidth / @pageWidth
+    for page in @pages()
+      actualWidth = page.canvas.width()
+      page.canvas.parent().height actualWidth / page.width * page.height
+      page.canvas.attr
+        height: actualWidth / page.width * page.height
+        width: actualWidth
+      page.scribble.setScale actualWidth / page.width
 
 fs = require 'fs'
 module.exports = ->
