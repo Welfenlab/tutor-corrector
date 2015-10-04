@@ -14,17 +14,17 @@ class ViewModel
     @pageCount = ko.computed => @pages().length
     @color = ko.observable()
     @tool = ko.observable()
-    @canUndo = ko.observable no
-    @canRedo = ko.observable no
     @exercise = ko.observable params.id
 
-  onShow: =>
-    $('#correctionCanvas')
-    .on 'scribble:undoAvailable.correction', => @canUndo yes
-    .on 'scribble:undoUnavailable.correction', => @canUndo no
-    .on 'scribble:redoAvailable.correction', => @canRedo yes
-    .on 'scribble:redoUnavailable.correction', => @canRedo no
+    @canUndo = ko.observable no
+    @canRedo = ko.observable no
+    @undoStack = new scribblejs.Undo()
+    @undoStack.on 'undoAvailable', => @canUndo yes
+    @undoStack.on 'undoUnavailable', => @canUndo no
+    @undoStack.on 'redoAvailable', => @canRedo yes
+    @undoStack.on 'redoUnavailable', => @canRedo no
 
+  onShow: =>
     $(document).on 'keydown.correction', (event) =>
       if event.keyCode == 90 and event.ctrlKey #Ctrl+Z
         if event.shiftKey #Ctrl+Shift+Z
@@ -101,7 +101,7 @@ class ViewModel
 
   registerCanvas: (page, element) ->
     canvas = $(element)
-    canvas.scribble()
+    canvas.scribble(undo: @undoStack)
     page.canvas = canvas
     page.scribble = canvas.scribble() #second scribble() call returns the scribble instance
     page.scribble.background = page.image
@@ -114,8 +114,8 @@ class ViewModel
     $(window).off '.correction'
     $(document).off '.correction'
 
-  undo: -> @scribble.undo()
-  redo: -> @scribble.redo()
+  undo: -> @undoStack.undo()
+  redo: -> @undoStack.redo()
 
   resize: ->
     for page in @pages()

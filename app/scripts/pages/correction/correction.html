@@ -48,7 +48,7 @@
 
   <!-- ko foreach: pages -->
   <div class="correctionPage">
-    <canvas data-bind="template: { afterRender: $parent.registerCanvas.bind(undefined, $data, $element), beforeRemove: $parent.unregisterCanvas.bind(undefined, $element) }"></canvas>
+    <canvas data-bind="template: { afterRender: $parent.registerCanvas.bind($parent, $data, $element), beforeRemove: $parent.unregisterCanvas.bind($parent, $element) }"></canvas>
   </div>
   <!-- /ko -->
 </div>
