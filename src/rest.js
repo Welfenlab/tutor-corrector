@@ -12,11 +12,17 @@ module.exports = function(DB){
     { path: '/api/correction', dataCall: DB.Corrections.getStatus, apiMethod: "getBySessionUID" },
     { path: '/api/correction/next/:id', dataCall: DB.Corrections.lockNextSolutionForTutor,
       apiMethod: "getBySessionUIDAndParam", param: "id", errStatus: 404 },
-    { path: '/api/correction/pdf/:solution', dataCall: function(solution_id){
+    { path: '/api/correction/pdf/:solution', dataCall: function(solution_id, res){
       return DB.Corrections.getPDFForID(solution_id).then(function(pdf){
-        return path.normalize(__dirname + "/../test.pdf");
+        res.setHeader('Content-disposition', 'attachment; filename=' + solution_id + '.pdf');
+        res.setHeader('Content-type', 'application/pdf');
+        if(pdf && pdf != "" && false){
+          res.send(pdf);
+        } else {
+          res.send(fs.readFileSync(path.normalize(__dirname + "/../test.pdf")));
+        }
       });
-    }, apiMethod: "getFileByParam", param:"solution" },,
+    }, apiMethod: "getResByParam", param:"solution" },,
     { path: '/api/correction/finish', dataCall: DB.Corrections.finishSolution,
       apiMethod: "postBySessionUIDAndParam", param: "id", errStatus: 404 },
     { path: '/api/correction/unfinished', dataCall: DB.Corrections.getUnfinishedSolutionsForTutor,
