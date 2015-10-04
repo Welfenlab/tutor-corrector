@@ -13,7 +13,7 @@ class ViewModel
     @pages = ko.observableArray()
     @pageCount = ko.computed => @pages().length
     @color = ko.observable()
-    @tool = ko.observable()
+    @tool = ko.observable('marker')
     @exercise = ko.observable params.id
 
     @canUndo = ko.observable no
@@ -48,6 +48,7 @@ class ViewModel
     @color.subscribe (v) =>
       for page in @pages()
         page.scribble.set 'color', v
+    @color '#f00'
 
     @tool.subscribe (v) =>
       for page in @pages()
@@ -105,6 +106,8 @@ class ViewModel
     page.canvas = canvas
     page.scribble = canvas.scribble() #second scribble() call returns the scribble instance
     page.scribble.background = page.image
+    page.scribble.set 'color', @color()
+    page.scribble.set 'tool', @tool()
 
   unregisterCanvas: (element) ->
     canvas = $(element)
