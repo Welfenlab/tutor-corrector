@@ -56,13 +56,10 @@ class ViewModel
         switch v
           when 'marker'
             page.scribble.set 'size', 5
-            @color '#f00'
           when 'highlighter'
             page.scribble.set 'size', 20
-            @color '#ff0'
           when 'text'
             page.scribble.set 'size', 20
-            @color '#f00'
           else
             page.scribble.set 'size', 5
     @tool 'marker'
