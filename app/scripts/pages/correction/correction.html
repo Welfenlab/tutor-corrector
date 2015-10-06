@@ -44,6 +44,13 @@
         <i class="repeat icon"></i>
       </button>
     </div>
+
+    <div class="ui icon buttons">
+      <button class="ui teal button" title="Save (Ctrl+S)"
+              data-bind="click: save, css: { loading: isSaving, disabled: isSaved }">
+        <i class="save icon"></i>
+      </button>
+    </div>
   </div>
 
   <!-- ko foreach: pages -->

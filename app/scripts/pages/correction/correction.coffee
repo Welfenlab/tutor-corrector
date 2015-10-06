@@ -10,11 +10,16 @@ class ViewModel
     if not $? then console.error 'No jQuery defined'
     if not $.fn.scribble then scribblejs($)
 
+    @correction = ko.observable({id: 42}) #TODO get correction
     @pages = ko.observableArray()
     @pageCount = ko.computed => @pages().length
     @color = ko.observable()
     @tool = ko.observable('marker')
     @exercise = ko.observable params.id
+    @isSaving = ko.observable false
+    @isSaved = ko.observable true
+
+    setInterval @autosave.bind(this), 30000 #auto-save every 30 seconds
 
     @canUndo = ko.observable no
     @canRedo = ko.observable no
@@ -26,6 +31,7 @@ class ViewModel
 
   onShow: =>
     $(document).on 'keydown.correction', (event) =>
+      event.preventDefault()
       if event.keyCode == 90 and event.ctrlKey #Ctrl+Z
         if event.shiftKey #Ctrl+Shift+Z
           @redo()
@@ -33,6 +39,8 @@ class ViewModel
           @undo()
       else if event.keyCode == 89 and event.ctrlKey #Ctrl+Y
         @redo()
+      else if event.keyCode == 83 and event.ctrlKey #Ctrl+S
+        @save()
 
     $(document).on 'scroll.correction', (event) ->
       if $(window).scrollTop() > 0
@@ -105,6 +113,7 @@ class ViewModel
     page.scribble.background = page.image
     page.scribble.set 'color', @color()
     page.scribble.set 'tool', @tool()
+    canvas.on 'afterPaint', => @isSaved false
 
   unregisterCanvas: (element) ->
     canvas = $(element)
@@ -116,6 +125,27 @@ class ViewModel
 
   undo: -> @undoStack.undo()
   redo: -> @undoStack.redo()
+
+  autosave: ->
+    @save() if not @isSaved()
+
+  save: ->
+    @isSaving true
+
+    solution = []
+    for page in @pages()
+      solution.push
+        annotations:
+          page: page.pageNo
+          shapes: page.scribble.getShapes()
+    console.log solution
+
+    api.put.correction @correction().id, solution
+    .then =>
+      @isSaving false
+      @isSaved true
+    .catch =>
+      @isSaving false
 
   resize: ->
     for page in @pages()

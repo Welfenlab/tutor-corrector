@@ -23,11 +23,16 @@ api =
     pdf: (id) -> get("/correction/pdf/#{id}")
   put:
     exercise: (id, content) -> put "/exercises/#{id}", content
+    correction: (id, results) -> put "/correction/store",
+      id: id
+      results: results
   post:
     login: (username, password) -> post "/login",
         id: username,
         password: password
     logout: -> post '/logout'
+    correction: (id, correction) ->
+      post ""
   urlOf:
     pdf: (id) -> "#{address}/correction/pdf/#{id}"
 
