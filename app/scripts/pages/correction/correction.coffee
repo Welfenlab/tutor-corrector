@@ -7,20 +7,30 @@ _ = require 'lodash'
 api = require '../../api'
 
 class ViewModel
-  constructor: (params) ->
+  constructor: (@params) ->
     if not $? then console.error 'No jQuery defined'
     if not $.fn.scribble then scribblejs($)
 
-    @pendingCorrections = ko.observableArray()
-    api.get.pendingCorrections params.id
-    .then (pending) => @pendingCorrections pending
-
-    @correction = ko.observable({id: 42}) #TODO get correction
     @pages = ko.observableArray()
     @pageCount = ko.computed => @pages().length
     @color = ko.observable()
     @tool = ko.observable('marker')
-    @exercise = ko.observable params.id
+
+    @exercise = ko.observable()
+    @solution = ko.observable()
+
+    @exercise.subscribe =>
+      getSolution = api.get.nextSolution @exercise()
+        .then (solution) => @solution solution
+      loadPdf = @loadPdf()
+
+      Q.all([getSolution, loadPdf])
+      .then =>
+        result = @solution().result
+        if result
+          for page,i in @pages()
+            page.scribble.loadShapes(result.pages[i].shapes || [], true)
+
     @isSaving = ko.observable false
     @isSaved = ko.observable true
 
@@ -77,10 +87,12 @@ class ViewModel
             page.scribble.set 'size', 5
     @tool 'marker'
 
+    @exercise @params.id
+
+  loadPdf: ->
     PDFJS.getDocument(api.urlOf.pdf(@exercise()))
     .then (pdf) =>
-      Q.all(
-        for pageNo in [1..pdf.numPages]
+      Q.all [1..pdf.numPages].map (pageNo) ->
           pdf.getPage(pageNo).then (page) ->
             #create an off-screen canvas for rendering the pdf
             canvas = document.createElement('canvas')
@@ -104,7 +116,6 @@ class ViewModel
               pdfImage.src = canvas.toDataURL()
               canvas.remove()
               return deferred.promise
-      )
     .then (pages) =>
       pages.sort (a, b) -> a.pageNo - b.pageNo
       @pages pages
@@ -136,16 +147,16 @@ class ViewModel
   save: ->
     @isSaving true
 
-    solution =
+    result =
       points: []
       pages: []
     for page in @pages()
-      solution.pages.push
+      result.pages.push
         page: page.pageNo
         shapes: page.scribble.getShapes()
-    console.log solution
+    console.log result
 
-    api.put.correction @correction().id, solution
+    api.put.correction @solution().id, result
     .then =>
       @isSaving false
       @isSaved true

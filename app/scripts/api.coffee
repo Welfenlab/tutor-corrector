@@ -9,9 +9,17 @@ ajax = (method, url, data) ->
     data: data
     method: method
 
+ajaxJson = (method, url, data) ->
+  Q $.ajax
+    url: address + url
+    data: data
+    contentType: 'application/json; charset=utf-8'
+    dataType: 'json'
+    method: method
+
 get = ajax.bind undefined, 'GET'
-put = ajax.bind undefined, 'PUT'
-post = ajax.bind undefined, 'POST'
+put = ajaxJson.bind undefined, 'PUT'
+post = ajaxJson.bind undefined, 'POST'
 del = ajax.bind undefined, 'DELETE'
 
 api =
@@ -21,12 +29,13 @@ api =
     overview: -> get('/correction')
     me: -> get('/tutor')
     pdf: (id) -> get("/correction/pdf/#{id}")
-    pendingCorrections: (exercise) -> get "/correction/pending/#{exercise}"
+    nextSolution: (exercise) -> get "/correction/next/#{exercise}"
   put:
     exercise: (id, content) -> put "/exercises/#{id}", content
     correction: (id, results) -> put "/correction/store",
-      id: id
-      results: results
+      JSON.stringify
+        id: id
+        results: results
   post:
     login: (username, password) -> post "/login",
         id: username,
