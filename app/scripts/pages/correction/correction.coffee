@@ -181,9 +181,13 @@ class ViewModel
       @isSaving false
 
   finalize: ->
-    #TODO finalize
     @isFinalizing true
-    setTimeout (=> @isFinalizing false; @exercise null), 1000
+    api.put.finalizeCorrection @solution().id
+    .then =>
+      @isFinalizing false
+      @exercise null
+    .catch =>
+      @isFinalizing false
 
   resize: ->
     for page in @pages()
