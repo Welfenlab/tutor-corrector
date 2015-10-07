@@ -3,12 +3,17 @@ require 'pdfjs-dist/build/pdf.combined' #defines PDFJS globaly
 #PDFJS.workerSrc = false
 scribblejs = require 'scribble.js'
 Q = require 'q'
+_ = require 'lodash'
 api = require '../../api'
 
 class ViewModel
   constructor: (params) ->
     if not $? then console.error 'No jQuery defined'
     if not $.fn.scribble then scribblejs($)
+
+    @pendingCorrections = ko.observableArray()
+    api.get.pendingCorrections params.id
+    .then (pending) => @pendingCorrections pending
 
     @correction = ko.observable({id: 42}) #TODO get correction
     @pages = ko.observableArray()
@@ -19,8 +24,6 @@ class ViewModel
     @isSaving = ko.observable false
     @isSaved = ko.observable true
 
-    setInterval @autosave.bind(this), 30000 #auto-save every 30 seconds
-
     @canUndo = ko.observable no
     @canRedo = ko.observable no
     @undoStack = new scribblejs.Undo()
@@ -28,6 +31,8 @@ class ViewModel
     @undoStack.on 'undoUnavailable', => @canUndo no
     @undoStack.on 'redoAvailable', => @canRedo yes
     @undoStack.on 'redoUnavailable', => @canRedo no
+
+    @autosave = _.throttle (=> @save() if not @isSaved()), 10000
 
   onShow: =>
     $(document).on 'keydown.correction', (event) =>
@@ -113,7 +118,9 @@ class ViewModel
     page.scribble.background = page.image
     page.scribble.set 'color', @color()
     page.scribble.set 'tool', @tool()
-    canvas.on 'afterPaint', => @isSaved false
+    canvas.on 'afterPaint', =>
+      @isSaved false
+      @autosave()
 
   unregisterCanvas: (element) ->
     canvas = $(element)
@@ -126,18 +133,16 @@ class ViewModel
   undo: -> @undoStack.undo()
   redo: -> @undoStack.redo()
 
-  autosave: ->
-    @save() if not @isSaved()
-
   save: ->
     @isSaving true
 
-    solution = []
+    solution =
+      points: []
+      pages: []
     for page in @pages()
-      solution.push
-        annotations:
-          page: page.pageNo
-          shapes: page.scribble.getShapes()
+      solution.pages.push
+        page: page.pageNo
+        shapes: page.scribble.getShapes()
     console.log solution
 
     api.put.correction @correction().id, solution

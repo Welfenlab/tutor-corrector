@@ -21,6 +21,7 @@ api =
     overview: -> get('/correction')
     me: -> get('/tutor')
     pdf: (id) -> get("/correction/pdf/#{id}")
+    pendingCorrections: (exercise) -> get "/correction/pending/#{exercise}"
   put:
     exercise: (id, content) -> put "/exercises/#{id}", content
     correction: (id, results) -> put "/correction/store",
