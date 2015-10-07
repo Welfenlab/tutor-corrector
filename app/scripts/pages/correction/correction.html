@@ -1,5 +1,5 @@
 <div class="correction" data-bind="template: { afterRender: onShow }">
-  <div class="toolbar">
+  <div class="toolbar" data-bind="visible: exercise()">
     <div class="ui icon buttons">
       <button class="ui button"
               data-bind="click: tool.bind($data, 'marker'), css: { active: tool() == 'marker'}">
@@ -63,7 +63,7 @@
   </div>
   <!-- /ko -->
 
-  <div class="bar" data-bind="with: correctionBar">
+  <div class="bar" data-bind="with: correctionBar, visible: exercise()">
     <div data-bind="template: { afterRender: onShow }" style="display:none"></div>
 
     <div class="column">

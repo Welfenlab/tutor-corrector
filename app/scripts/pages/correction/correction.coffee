@@ -24,6 +24,10 @@ class ViewModel
     @correctionBar = new CorrectionBarViewModel @exercise, @solution, @points
 
     @exercise.subscribe =>
+      if !@exercise()
+        @pages []
+        return
+
       getSolution = api.get.nextSolution @exercise().id
         .then (solution) => @solution solution
       loadPdf = @loadPdf()
@@ -179,7 +183,7 @@ class ViewModel
   finalize: ->
     #TODO finalize
     @isFinalizing true
-    setTimeout (=> @isFinalizing false), 1000
+    setTimeout (=> @isFinalizing false; @exercise null), 1000
 
   resize: ->
     for page in @pages()
