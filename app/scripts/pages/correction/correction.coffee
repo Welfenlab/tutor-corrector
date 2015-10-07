@@ -5,6 +5,7 @@ scribblejs = require 'scribble.js'
 Q = require 'q'
 _ = require 'lodash'
 api = require '../../api'
+CorrectionBarViewModel = require './bar'
 
 class ViewModel
   constructor: (@params) ->
@@ -18,19 +19,24 @@ class ViewModel
 
     @exercise = ko.observable()
     @solution = ko.observable()
+    @points = ko.observable()
+    @points.subscribe => @isSaved false
+    @correctionBar = new CorrectionBarViewModel @exercise, @solution, @points
 
     @exercise.subscribe =>
-      getSolution = api.get.nextSolution @exercise()
+      getSolution = api.get.nextSolution @exercise().id
         .then (solution) => @solution solution
       loadPdf = @loadPdf()
 
       Q.all([getSolution, loadPdf])
       .then =>
         result = @solution().result
+        @points new Array(@solution().tasks.length)
         if result
+          @points result.points
           for page,i in @pages()
             page.scribble.loadShapes(result.pages[i].shapes || [], true)
-
+        @isSaved true
     @isSaving = ko.observable false
     @isSaved = ko.observable true
 
@@ -43,6 +49,9 @@ class ViewModel
     @undoStack.on 'redoUnavailable', => @canRedo no
 
     @autosave = _.throttle (=> @save() if not @isSaved()), 10000
+
+    @canFinalize = ko.computed => @isSaved() and _.every @points(), Number
+    @isFinalizing = ko.observable false
 
   onShow: =>
     $(document).on 'keydown.correction', (event) =>
@@ -87,7 +96,8 @@ class ViewModel
             page.scribble.set 'size', 5
     @tool 'marker'
 
-    @exercise @params.id
+    api.get.exercise @params.id
+    .then (exercise) => @exercise exercise
 
   loadPdf: ->
     PDFJS.getDocument(api.urlOf.pdf(@exercise()))
@@ -152,13 +162,12 @@ class ViewModel
     @isSaving true
 
     result =
-      points: []
+      points: @points()
       pages: []
     for page in @pages()
       result.pages.push
         page: page.pageNo
         shapes: page.scribble.getShapes()
-    console.log result
 
     api.put.correction @solution().id, result
     .then =>
@@ -166,6 +175,11 @@ class ViewModel
       @isSaved true
     .catch =>
       @isSaving false
+
+  finalize: ->
+    #TODO finalize
+    @isFinalizing true
+    setTimeout (=> @isFinalizing false), 1000
 
   resize: ->
     for page in @pages()

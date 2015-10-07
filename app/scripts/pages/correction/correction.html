@@ -50,6 +50,10 @@
               data-bind="click: save, css: { loading: isSaving, disabled: isSaved }">
         <i class="save icon"></i>
       </button>
+      <button class="ui teal button"
+              data-bind="click: finalize, css: { loading: isFinalizing, disabled: !canFinalize() }">
+        <i class="checkmark icon"></i>
+      </button>
     </div>
   </div>
 
@@ -58,4 +62,50 @@
     <canvas data-bind="template: { afterRender: $parent.registerCanvas.bind($parent, $data, $element), beforeRemove: $parent.unregisterCanvas.bind($parent, $element) }"></canvas>
   </div>
   <!-- /ko -->
+
+  <div class="bar" data-bind="with: correctionBar">
+    <div data-bind="template: { afterRender: onShow }" style="display:none"></div>
+
+    <div class="column">
+      <div class="ui teal icon button" data-bind="click: prev, css: { disabled: !canGoPrev()}">
+        <i class="left double angle icon"></i>
+      </div>
+    </div>
+
+    <div class="column">
+      <strong>
+        Aufgabe <span data-bind="text: task().number"></span> &ndash;
+        <span data-bind="text: task().title"></span><br/>
+      </strong>
+
+      <div data-bind="visible: tests().length > 0">
+        <div id="showtests">
+          <span data-bind="text: passedTests().length"></span>/<span data-bind="text: tests().length"></span> Tests bestanden
+        </div>
+        <div class="ui flowing popup top left transition hidden">
+          <div class="ui list" data-bind="foreach: tests">
+            <div class="item">
+              <i class="green checkmark icon" data-bind="visible: passes"></i>
+              <i class="red remove icon" data-bind="visible: !passes"></i>
+              <div class="content" data-bind="text: name"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right column">
+      <div class="ui teal icon button" data-bind="click: next, css: { disabled: !canGoNext()}">
+        <i class="right double angle button icon"></i>
+      </div>
+    </div>
+    <div class="right column">
+      <div class="ui right labeled small input">
+        <input type="number" data-bind="textInput: taskPoints" style="width:60px;padding-right:0">
+        <div class="ui basic label">
+          / <span data-bind="text: task().maxPoints"></span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

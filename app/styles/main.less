@@ -190,6 +190,7 @@ body {
 
 .correction {
   position: relative;
+  padding-bottom: 80px;
 
   .toolbar {
     position: fixed;
@@ -222,6 +223,29 @@ body {
       width: 100%;
       top: 0;
       left: 0;
+    }
+  }
+
+  .bar {
+    height: 46px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    box-shadow: 0 0 5px #aaa;
+    background: #eee;
+
+    .column {
+      float: left;
+      padding: 5px;
+
+      .button {
+        margin: 0;
+      }
+
+      &.right {
+        float: right;
+      }
     }
   }
 }
