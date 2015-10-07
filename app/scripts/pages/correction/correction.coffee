@@ -141,8 +141,12 @@ class ViewModel
     $(window).off '.correction'
     $(document).off '.correction'
 
-  undo: -> @undoStack.undo()
-  redo: -> @undoStack.redo()
+  undo: ->
+    @undoStack.undo()
+    @isSaved false
+  redo: ->
+    @undoStack.redo()
+    @isSaved false
 
   save: ->
     @isSaving true
