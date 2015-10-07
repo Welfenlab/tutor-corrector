@@ -33,7 +33,7 @@ api =
   put:
     exercise: (id, content) -> put "/exercises/#{id}", content
     correction: (id, results) -> put "/correction/store",
-        id: id
+        solution: id
         results: results
   post:
     login: (username, password) -> post "/login",
