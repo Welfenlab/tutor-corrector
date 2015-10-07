@@ -12,7 +12,7 @@ ajax = (method, url, data) ->
 ajaxJson = (method, url, data) ->
   Q $.ajax
     url: address + url
-    data: data
+    data: JSON.stringify data
     contentType: 'application/json; charset=utf-8'
     dataType: 'json'
     method: method
@@ -33,7 +33,6 @@ api =
   put:
     exercise: (id, content) -> put "/exercises/#{id}", content
     correction: (id, results) -> put "/correction/store",
-      JSON.stringify
         id: id
         results: results
   post:
