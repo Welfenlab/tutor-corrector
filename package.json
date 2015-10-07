@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@tutor/dummy-auth": "^0.1.7",
-    "@tutor/memory-database": "0.6.5",
+    "@tutor/memory-database": "0.6.6",
     "brfs": "^1.4.0",
     "browserify": "^11.0.1",
     "browserify-shim": "^3.8.10",
