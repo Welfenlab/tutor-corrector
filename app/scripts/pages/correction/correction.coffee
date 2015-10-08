@@ -59,7 +59,6 @@ class ViewModel
 
   onShow: =>
     $(document).on 'keydown.correction', (event) =>
-      event.preventDefault()
       if event.keyCode == 90 and event.ctrlKey #Ctrl+Z
         if event.shiftKey #Ctrl+Shift+Z
           @redo()
@@ -69,6 +68,9 @@ class ViewModel
         @redo()
       else if event.keyCode == 83 and event.ctrlKey #Ctrl+S
         @save()
+      else
+        return #only preventDefault() if this was a shortcut
+      event.preventDefault()
 
     $(document).on 'scroll.correction', (event) ->
       if $(window).scrollTop() > 0
