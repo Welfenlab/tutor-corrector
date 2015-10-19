@@ -1,5 +1,6 @@
 ko = require 'knockout'
 api = require '../../api'
+app = require '../../app'
 _ = require 'lodash'
 
 class ExerciseCard
@@ -15,11 +16,23 @@ class ExerciseCard
       is: data.is
     @contingent.ratio = @contingent.is / Math.ceil data.should
 
-  correct: -> window.location.hash = "#correction/#{@exercise.id()}"
+  correct: -> app.router.goto "correction/#{@exercise.id()}"
+
+class UnfinishedCorrection
+  constructor: (data) ->
+    #TODO
+    @correction = data
+    @exercise = data.exercise
+    @lockDateText = '10 minutes ago' #TODO use moment.js to calculate the time since locking
+
+  show: ->
+    app.router.goto "correction/by-solution/#{@correction.id}"
+    #TODO this should open the correction page for this solution id, see #14
 
 class ViewModel
   constructor: ->
     @exercises = ko.observableArray()
+    @lockedCorrections = ko.observableArray()
 
     api.get.overview()
     .then (data) =>
@@ -28,6 +41,13 @@ class ViewModel
         exercise.should = exercise.should
         new ExerciseCard(exercise)
     .catch (e) -> console.log e
+
+    api.get.unfinishedCorrections()
+    .then (data) =>
+      @lockedCorrections data.map (correction) ->
+        new UnfinishedCorrection(correction)
+    .catch (e) -> console.log e
+
 
 fs = require 'fs'
 module.exports = ->

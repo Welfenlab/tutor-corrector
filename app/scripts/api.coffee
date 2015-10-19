@@ -30,6 +30,16 @@ api =
     me: -> get('/tutor')
     pdf: (id) -> get("/correction/pdf/#{id}")
     nextSolution: (exercise) -> get "/correction/next/#{exercise}"
+    unfinishedCorrections: -> Q [ #TODO remove demo data and make actual request
+      {
+        id: 42
+        exercise: {
+          id: 123
+          number: 1
+          title: 'Exercise 1'
+        }
+      }
+    ]
   put:
     exercise: (id, content) -> put "/exercises/#{id}", content
     correction: (id, results) -> put "/correction/store",

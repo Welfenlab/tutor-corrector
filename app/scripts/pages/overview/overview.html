@@ -41,4 +41,21 @@
     </div>
     <!-- /ko -->
   </div>
+  <div class="ui card">
+    <div class="ui content">
+      <div class="header">Unvollst&auml;ndige Korrekturen</div>
+      <div class="ui list" data-bind="foreach: lockedCorrections">
+        <div class="item" data-bind="click: show">
+            <i class="large write middle aligned icon"></i>
+            <div class="content">
+              <a class="header">Exercise <span data-bind="text: exercise.number"></span></a>
+              <div class="description">Started <span data-bind="text: lockDateText"></span></div>
+            </div>
+          </div>
+      </div>
+      <span data-bind="visible: lockedCorrections().length == 0">
+        Du hast derzeit keine unvollst&auml;ndligen Korrekturen.
+      </span>
+    </div>
+  </div>
 </div>
