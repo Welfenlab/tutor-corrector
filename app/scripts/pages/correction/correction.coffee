@@ -54,7 +54,7 @@ class ViewModel
 
     @autosave = _.throttle (=> @save() if not @isSaved()), 10000
 
-    @canFinalize = ko.computed => @isSaved() and _.every @points(), Number
+    @canFinalize = ko.computed => @isSaved() and _.every @points(), (p) -> typeof parseInt(p) is 'number'
     @isFinalizing = ko.observable false
 
   onShow: =>
