@@ -37,7 +37,8 @@ api =
           id: 123
           number: 1
           title: 'Exercise 1'
-        }
+        },
+        lockDate: new Date(1970)
       }
     ]
   put:

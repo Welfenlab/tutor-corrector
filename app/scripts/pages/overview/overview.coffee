@@ -2,6 +2,7 @@ ko = require 'knockout'
 api = require '../../api'
 app = require '../../app'
 _ = require 'lodash'
+moment = require 'moment'
 
 class ExerciseCard
   constructor: (data) ->
@@ -23,8 +24,8 @@ class UnfinishedCorrection
     #TODO
     @correction = data
     @exercise = data.exercise
-    @lockDateText = '10 minutes ago' #TODO use moment.js to calculate the time since locking
-
+    @lockDateText = moment(data.lockDate).from(Date.now())
+    
   show: ->
     app.router.goto "correction/by-solution/#{@correction.id}"
     #TODO this should open the correction page for this solution id, see #14
