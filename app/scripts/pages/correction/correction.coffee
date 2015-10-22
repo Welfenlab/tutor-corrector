@@ -23,24 +23,35 @@ class ViewModel
     @points.subscribe => @isSaved false
     @correctionBar = new CorrectionBarViewModel @exercise, @solution, @points
 
-    @exercise.subscribe =>
+    @loadSolution = => #load the solution and pdf for the current exercise
       if !@exercise()
         @pages []
         return
 
       getSolution = api.get.nextSolution @exercise().id
         .then (solution) => @solution solution
-      loadPdf = @loadPdf()
 
-      Q.all([getSolution, loadPdf])
-      .then =>
-        result = @solution().result
-        @points new Array(@solution().tasks.length)
-        if result
-          @points result.points
-          for page,i in @pages()
-            page.scribble.loadShapes(result.pages[i].shapes || [], true)
-        @isSaved true
+      Q.all([getSolution, @loadPdf()]).then => @initPages()
+
+    @loadExercise = => #load the exercise and pdf for the current solution
+      if !@solution()
+        @pages []
+        return
+
+      getExercise = api.get.exercise @solution().exercise
+        .then (exercise) => @exercise exercise
+
+      Q.all([getExercise, @loadPdf()]).then => @initPages
+
+    @initPages = =>
+      result = @solution().result
+      @points new Array(@solution().tasks.length)
+      if result
+        @points result.points
+        for page,i in @pages()
+          page.scribble.loadShapes(result.pages[i].shapes || [], true)
+      @isSaved true
+
     @isSaving = ko.observable false
     @isSaved = ko.observable true
 
@@ -102,8 +113,18 @@ class ViewModel
             page.scribble.set 'size', 5
     @tool 'marker'
 
-    api.get.exercise @params.id
-    .then (exercise) => @exercise exercise
+    if @params.exerciseId
+      api.get.exercise @params.exerciseId
+      .then (exercise) =>
+        @exercise exercise
+        @loadSolution()
+      .catch -> alert 'Could not load this solution.'
+    else if @params.solutionId
+      api.get.solution @params.solutionId
+      .then (solution) =>
+        @solution solution
+        @loadExercise()
+      .catch -> alert 'Could not load this solution.'
 
   loadPdf: ->
     PDFJS.getDocument(api.urlOf.pdf(@exercise()))

@@ -30,6 +30,7 @@ api =
     me: -> get('/tutor')
     pdf: (id) -> get("/correction/pdf/#{id}")
     nextSolution: (exercise) -> get "/correction/next/#{exercise}"
+    solution: (id) -> get "/solution/#{id}"
     unfinishedCorrections: -> Q [ #TODO remove demo data and make actual request
       {
         id: 42

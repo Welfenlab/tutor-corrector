@@ -1,6 +1,7 @@
 app = require './app'
 ko = require 'knockout'
 
+correctionComponent = require('./pages/correction/correction')()
 app.router.pages [
   {
     path: 'login'
@@ -15,9 +16,14 @@ app.router.pages [
     component: require('./pages/students/students')()
   }
   {
+    path: /correction\/by-solution\/?(.*)/
+    as: ['solutionId'] #name the parameters
+    component: correctionComponent
+  }
+  {
     path: /correction\/?(.*)/
-    as: ['id'] #name the parameters
-    component: require('./pages/correction/correction')()
+    as: ['exerciseId'] #name the parameters
+    component: correctionComponent
   }
 ]
 
