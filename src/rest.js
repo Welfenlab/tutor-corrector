@@ -22,7 +22,7 @@ module.exports = function(DB){
           res.send(fs.readFileSync(path.normalize(__dirname + "/../test.pdf")));
         }
       });
-    }, apiMethod: "getResByParam", param:"solution" },,
+    }, apiMethod: "getResByParam", param:"solution" },
     { path: '/api/correction/finish', dataCall: DB.Corrections.finishSolution,
       apiMethod: "postBySessionUIDAndParam", param: "solution", errStatus: 404 },
     { path: '/api/correction/unfinished/:exercise', dataCall: DB.Corrections.getUnfinishedSolutionsForTutor,
@@ -38,8 +38,8 @@ module.exports = function(DB){
       apiMethod: "getByParam", param: "user" },
     { path: '/api/solution/for/user/:user/exercise/:exercise', dataCall: DB.Corrections.getUserExerciseSolution,
         apiMethod: "getByParams", params: ["user","exercise"] },
-    { path: '/api/solution/:id', dataCall: DB.Exercises.getExerciseSolution,
-      apiMethod: "getBySessionUIDAndParam", param: "id", errStatus: 404 },
+    { path: '/api/solution/:id', dataCall: DB.Corrections.getSolutionById,
+      apiMethod: "getByParam", param: "id", errStatus: 404 },
     { path: '/api/corrections/unfinished', dataCall: DB.Corrections.getUnfinishedSolutionsForTutor,
       apiMethod: "getBySessionUID" }
   ];
