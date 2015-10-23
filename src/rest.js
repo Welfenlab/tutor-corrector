@@ -40,7 +40,7 @@ module.exports = function(DB){
         apiMethod: "getByParams", params: ["user","exercise"] },
     { path: '/api/solution/:id', dataCall: DB.Exercises.getExerciseSolution,
       apiMethod: "getBySessionUIDAndParam", param: "id", errStatus: 404 },
-    { path: '/api/solutions/unfinished', dataCall: DB.Corrections.getUnfinishedSolutionsForTutor,
+    { path: '/api/corrections/unfinished', dataCall: DB.Corrections.getUnfinishedSolutionsForTutor,
       apiMethod: "getBySessionUID" }
   ];
 };

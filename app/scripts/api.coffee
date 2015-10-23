@@ -31,17 +31,7 @@ api =
     pdf: (id) -> get("/correction/pdf/#{id}")
     nextSolution: (exercise) -> get "/correction/next/#{exercise}"
     solution: (id) -> get "/solution/#{id}"
-    unfinishedCorrections: -> Q [ #TODO remove demo data and make actual request
-      {
-        id: 42
-        exercise: {
-          id: 123
-          number: 1
-          title: 'Exercise 1'
-        },
-        lockDate: new Date(1970)
-      }
-    ]
+    unfinishedCorrections: -> get '/corrections/unfinished'
   put:
     exercise: (id, content) -> put "/exercises/#{id}", content
     correction: (id, results) -> put "/correction/store",
