@@ -57,7 +57,7 @@
                       <i class="student icon"></i>
                       Tutor Corrector
                     </a>
-                    <a href="#overview" class="ui item">
+                    <a href="#overview" class="ui item" data-bind="css: { active: isActive('overview') }">
                         <i class="list icon"></i>
                         Overview
                     </a>
@@ -90,17 +90,13 @@
                           <div class="ui dropdown link item">
                             <i class="content icon"></i>
                             <div class="menu">
-                                <a href="#" class="ui item">
+                                <a href="#" class="ui item" data-bind="css: { active: isActive('login') }">
                                     <i class="sign in icon"></i>
                                     Login
                                 </a>
-                                <a href="#overview" class="ui item">
+                                <a href="#overview" class="ui item" data-bind="css: { active: isActive('overview') }">
                                     <i class="list icon"></i>
                                     Overview
-                                </a>
-                                <a href="#students" class="ui item">
-                                    <i class="users icon"></i>
-                                    Studenten
                                 </a>
                             </div>
                           </div>
