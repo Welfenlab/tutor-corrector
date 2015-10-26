@@ -1,61 +1,67 @@
-<div class="ui segment">
-  <div class="ui cards">
-    <!-- ko foreach: exercises -->
-    <div class="ui card">
-      <div class="ui content">
-        <div class="ui red top right attached basic label" data-bind="visible: contingent.ratio < 0.25">
-          <i class="frown icon"></i>
-          <span data-bind="text: contingent.is"></span> / <span data-bind="text: contingent.should"></span> erledigt
-        </div>
-        <div class="ui orange top right attached basic label" data-bind="visible: contingent.ratio < 1 && contingent.ratio >= 0.25">
-          <i class="meh icon"></i>
-          <span data-bind="text: contingent.is"></span> / <span data-bind="text: contingent.should"></span> erledigt
-        </div>
-        <div class="ui green top right attached basic label" data-bind="visible: contingent.ratio == 1">
-          <i class="smile icon"></i>
-          <span data-bind="text: contingent.is"></span> / <span data-bind="text: contingent.should"></span> erledigt
-        </div>
-        <div class="header">Übung <span data-bind="text: exercise.number"></span></div>
-        <div class="meta">Abgabe bis: <span data-bind="text: formattedDueDate"></span></div>
-        <div class="description">
-          <div class="ui header huge important">
-            <b style="color:orange"><span data-bind="text: corrected"></span> </b>
-            <span style="color:lightgray">/ <span data-bind="text: solutions"></span></span>
-          </div>
-        </div>
-      </div>
-      <!-- ko ifnot: isDue -->
-      <div class="ui bottom attached gray disabled button">
-        <i class="wait icon"></i>
-        In Bearbeitung&hellip;
-      </div>
-      <!-- /ko -->
-      <!-- ko if: isDue -->
-        <!-- ko ifnot: isCorrected -->
-        <a class="ui bottom attached blue button" data-bind="click: correct">
-          <i class="write icon"></i>
-          Korrigieren
-        </a>
-        <!-- /ko -->
-      <!-- /ko -->
-    </div>
-    <!-- /ko -->
-  </div>
-  <div class="ui card">
-    <div class="ui content">
-      <div class="header">Unvollst&auml;ndige Korrekturen</div>
-      <div class="ui list" data-bind="foreach: lockedCorrections">
-        <div class="item" data-bind="click: show">
-            <i class="large write middle aligned icon"></i>
-            <div class="content">
-              <a class="header">Exercise <span data-bind="text: exercise.number"></span></a>
-              <div class="description">Started <span data-bind="text: lockDateText"></span></div>
+<div class="ui stackable grid">
+  <div class="row">
+    <div class="ui twelve wide column">
+      <div class="ui segment">
+        <div class="ui cards">
+          <!-- ko foreach: exercises -->
+          <div class="ui card">
+            <div class="ui content">
+              <div class="ui red top right attached basic label" data-bind="visible: contingent.ratio < 0.25">
+                <i class="frown icon"></i>
+                <span data-bind="text: contingent.is"></span> / <span data-bind="text: contingent.should"></span> erledigt
+              </div>
+              <div class="ui orange top right attached basic label" data-bind="visible: contingent.ratio < 1 && contingent.ratio >= 0.25">
+                <i class="meh icon"></i>
+                <span data-bind="text: contingent.is"></span> / <span data-bind="text: contingent.should"></span> erledigt
+              </div>
+              <div class="ui green top right attached basic label" data-bind="visible: contingent.ratio == 1">
+                <i class="smile icon"></i>
+                <span data-bind="text: contingent.is"></span> / <span data-bind="text: contingent.should"></span> erledigt
+              </div>
+              <div class="header">Übung <span data-bind="text: exercise.number"></span></div>
+              <div class="meta">Abgabe bis: <span data-bind="text: formattedDueDate"></span></div>
+              <div class="description">
+                <div class="ui header huge important">
+                  <b style="color:orange"><span data-bind="text: corrected"></span> </b>
+                  <span style="color:lightgray">/ <span data-bind="text: solutions"></span></span>
+                </div>
+              </div>
             </div>
+            <!-- ko ifnot: isDue -->
+            <div class="ui bottom attached gray disabled button">
+              <i class="wait icon"></i>
+              In Bearbeitung&hellip;
+            </div>
+            <!-- /ko -->
+            <!-- ko if: isDue -->
+              <!-- ko ifnot: isCorrected -->
+              <a class="ui bottom attached blue button" data-bind="click: correct">
+                <i class="write icon"></i>
+                Korrigieren
+              </a>
+              <!-- /ko -->
+            <!-- /ko -->
           </div>
+          <!-- /ko -->
+        </div>
       </div>
-      <span data-bind="visible: lockedCorrections().length == 0">
-        Du hast derzeit keine unvollst&auml;ndligen Korrekturen.
-      </span>
+    </div>
+    <div class="ui four wide column">
+      <div class="ui segment">
+        <h3 class="ui header">Unvollst&auml;ndige Korrekturen</h3>
+        <div class="ui list" data-bind="foreach: lockedCorrections">
+          <div class="item" data-bind="click: show">
+              <i class="large write middle aligned icon"></i>
+              <div class="content">
+                <a class="header">Exercise <span data-bind="text: exercise.number"></span></a>
+                <div class="description">Started <span data-bind="text: lockDateText"></span></div>
+              </div>
+            </div>
+        </div>
+        <div class="ui center aligned basic segment" data-bind="visible: lockedCorrections().length == 0">
+          Du hast derzeit keine unvollst&auml;ndligen Korrekturen.
+        </div>
+      </div>
     </div>
   </div>
 </div>
