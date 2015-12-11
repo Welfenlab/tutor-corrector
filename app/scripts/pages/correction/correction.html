@@ -1,4 +1,4 @@
-<div class="correction" data-bind="template: { afterRender: onShow }">
+<div class="correction" data-bind="template: { afterRender: onShow, beforeRemove: onHide }">
   <div class="toolbar" data-bind="visible: exercise()">
     <div class="ui icon buttons">
       <button class="ui button"
