@@ -31,7 +31,7 @@ class ViewModel
       getSolution = api.get.nextSolution @exercise().id
         .then (solution) => @solution solution
 
-      Q.all([getSolution, @loadPdf()]).then => @initPages()
+      getSolution.then(=> @loadPdf()).then => @initPages()
 
     @loadExercise = => #load the exercise and pdf for the current solution
       if !@solution()
@@ -118,16 +118,20 @@ class ViewModel
       .then (exercise) =>
         @exercise exercise
         @loadSolution()
-      .catch -> alert 'Could not load this solution.'
+      .catch (e) -> 
+        console.error(e)
+        alert 'Could not load this solution.'
     else if @params.solutionId
       api.get.solution @params.solutionId
       .then (solution) =>
         @solution solution
         @loadExercise()
-      .catch -> alert 'Could not load this solution.'
+      .catch (e) ->
+        console.error(e)
+        alert 'Could not load this solution.'
 
   loadPdf: ->
-    PDFJS.getDocument(api.urlOf.pdf(@exercise()))
+    PDFJS.getDocument(api.urlOf.pdf(@solution().id))
     .then (pdf) =>
       Q.all [1..pdf.numPages].map (pageNo) ->
           pdf.getPage(pageNo).then (page) ->
