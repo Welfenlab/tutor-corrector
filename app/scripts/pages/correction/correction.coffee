@@ -26,7 +26,7 @@ class ViewModel
     @loadSolution = => #load the solution and pdf for the current exercise
       if !@exercise()
         @pages []
-        return
+        return Q.reject()
 
       getSolution = api.get.nextSolution @exercise().id
         .then (solution) => @solution solution
@@ -36,12 +36,12 @@ class ViewModel
     @loadExercise = => #load the exercise and pdf for the current solution
       if !@solution()
         @pages []
-        return
+        return Q.reject()
 
       getExercise = api.get.exercise @solution().exercise
         .then (exercise) => @exercise exercise
 
-      Q.all([getExercise, @loadPdf()]).then => @initPages
+      getExercise.then(=> @loadPdf()).then => @initPages()
 
     @initPages = =>
       result = @solution().result
@@ -118,7 +118,7 @@ class ViewModel
       .then (exercise) =>
         @exercise exercise
         @loadSolution()
-      .catch (e) -> 
+      .catch (e) ->
         console.error(e)
         alert 'Could not load this solution.'
     else if @params.solutionId
