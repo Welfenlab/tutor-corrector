@@ -79,6 +79,14 @@ class ViewModel
         @redo()
       else if event.keyCode == 83 and event.ctrlKey #Ctrl+S
         @save()
+      else if event.keyCode == 49 and event.altKey #Alt+1
+        @tool 'marker'
+      else if event.keyCode == 50 and event.altKey #Alt+2
+        @tool 'highlighter'
+      else if event.keyCode == 51 and event.altKey #Alt+3
+        @tool 'text'
+      else if event.keyCode == 52 and event.altKey #Alt+4
+        @tool 'eraser'
       else
         return #only preventDefault() if this was a shortcut
       event.preventDefault()

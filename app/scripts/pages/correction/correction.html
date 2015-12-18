@@ -2,18 +2,22 @@
   <div class="toolbar" data-bind="visible: exercise()">
     <div class="ui icon buttons">
       <button class="ui button"
+              title="Alt+1"
               data-bind="click: tool.bind($data, 'marker'), css: { active: tool() == 'marker'}">
         <i class="write icon"></i>
       </button>
       <button class="ui button"
+              title="Alt+2"
               data-bind="click: tool.bind($data, 'highlighter'), css: { active: tool() == 'highlighter'}">
       <i class="paint brush icon"></i>
       </button>
       <button class="ui button"
+              title="Alt+3"
               data-bind="click: tool.bind($data, 'text'), css: { active: tool() == 'text'}">
       <i class="font icon"></i>
       </button>
       <button class="ui button"
+              title="Alt+4"
               data-bind="click: tool.bind($data, 'eraser'), css: { active: tool() == 'eraser'}">
         <i class="erase icon"></i>
       </button>
