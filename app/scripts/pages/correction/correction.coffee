@@ -34,10 +34,11 @@ class ViewModel
       getSolution.then(=> @loadPdf()).then => @initPages()
 
     @loadExercise = => #load the exercise and pdf for the current solution
+      alert 'hi'
       if !@solution()
         @pages []
         return Q.reject()
-
+      console.log 'getting exercise...'
       getExercise = api.get.exercise @solution().exercise
         .then (exercise) => @exercise exercise
 
