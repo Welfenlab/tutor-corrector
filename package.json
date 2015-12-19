@@ -39,7 +39,7 @@
     "scribble.js": "lemaik/scribble.js#v1.4.0"
   },
   "devDependencies": {
-    "@tutor/dummy-auth": "^0.1.7",
+    "@tutor/dummy-auth": "0.1.7",
     "@tutor/memory-database": "0.6.10",
     "brfs": "^1.4.0",
     "browserify": "^11.0.1",
