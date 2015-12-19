@@ -74,14 +74,8 @@
     <div data-bind="template: { afterRender: onShow }" style="display:none"></div>
 
     <div class="column">
-      <div class="ui teal icon button" data-bind="click: prev, css: { disabled: !canGoPrev()}">
-        <i class="left double angle icon"></i>
-      </div>
-    </div>
-
-    <div class="column">
       <strong>
-        Aufgabe <span data-bind="text: task().number"></span> &ndash;
+        Task <span data-bind="text: task().number"></span> &ndash;
         <span data-bind="text: task().title"></span><br/>
       </strong>
 
@@ -99,16 +93,26 @@
           </div>
         </div>
       </div>
+      <div data-bind="visible: tests().length == 0">
+        <em>No tests available for this task.</em>
+      </div>
     </div>
 
     <div class="right column">
-      <div class="ui teal icon button" data-bind="click: next, css: { disabled: !canGoNext()}">
-        <i class="right double angle button icon"></i>
+      <div class="ui buttons">
+        <button class="ui teal icon button" data-bind="click: prev, css: { disabled: !canGoPrev()}">
+          <i class="left angle icon"></i>
+        </button>
+        <button class="ui teal icon button" data-bind="click: next, css: { disabled: !canGoNext()}">
+          <i class="right angle button icon"></i>
+        </button>
       </div>
     </div>
     <div class="right column">
+      Points for <strong>Task <span data-bind="text: task().number"></span></strong>:&nbsp;
       <div class="ui right labeled small input">
-        <input type="number" data-bind="textInput: taskPoints" style="width:60px;padding-right:0">
+        <input type="number" data-bind="textInput: taskPoints, attr: { max: task().maxPoints }"
+               min="0" style="width:60px;padding-right:0">
         <div class="ui basic label">
           / <span data-bind="text: task().maxPoints"></span>
         </div>
