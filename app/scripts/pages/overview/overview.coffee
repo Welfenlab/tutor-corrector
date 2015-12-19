@@ -21,14 +21,14 @@ class ExerciseCard
 
 class UnfinishedCorrection
   constructor: (data) ->
-    #TODO
     @correction = data
-    @exercise = data.exercise
-    @lockDateText = moment(data.lockDate).from(Date.now())
-    
+    @exercise = ko.observable({})
+    api.get.exercise(data.exercise).then (data) => @exercise(data)
+    @lockDateText = moment(data.lockTimeStamp).from(Date.now())
+    @hash = data.id.substr(0, 8)
+
   show: ->
     app.router.goto "correction/by-solution/#{@correction.id}"
-    #TODO this should open the correction page for this solution id, see #14
 
 class ViewModel
   constructor: ->
@@ -45,8 +45,11 @@ class ViewModel
 
     api.get.unfinishedCorrections()
     .then (data) =>
-      @lockedCorrections data.map (correction) ->
-        new UnfinishedCorrection(correction)
+      data = _.chain(data)
+        .sortByOrder('lockTimeStamp', 'desc')
+        .map (correction) -> new UnfinishedCorrection(correction)
+        .value()
+      @lockedCorrections data
     .catch (e) -> console.log e
 
 
