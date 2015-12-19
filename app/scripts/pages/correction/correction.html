@@ -2,22 +2,22 @@
   <div class="toolbar" data-bind="visible: exercise()">
     <div class="ui icon buttons">
       <button class="ui button"
-              title="Alt+1"
+              title="Pen (Alt+1)"
               data-bind="click: tool.bind($data, 'marker'), css: { active: tool() == 'marker'}">
         <i class="write icon"></i>
       </button>
       <button class="ui button"
-              title="Alt+2"
+              title="Highlighter (Alt+2)"
               data-bind="click: tool.bind($data, 'highlighter'), css: { active: tool() == 'highlighter'}">
       <i class="paint brush icon"></i>
       </button>
       <button class="ui button"
-              title="Alt+3"
+              title="Text (Alt+3)"
               data-bind="click: tool.bind($data, 'text'), css: { active: tool() == 'text'}">
       <i class="font icon"></i>
       </button>
       <button class="ui button"
-              title="Alt+4"
+              title="Eraser (Alt+4)"
               data-bind="click: tool.bind($data, 'eraser'), css: { active: tool() == 'eraser'}">
         <i class="erase icon"></i>
       </button>
@@ -25,14 +25,17 @@
 
     <div class="ui buttons">
       <button class="ui button"
+              title="Red (Alt+R)"
               data-bind="click: color.bind($data, '#f00'), css: { red: color() == '#f00'}">
               Red
       </button>
       <button class="ui button"
+              title="Yellow (Alt+Y)"
               data-bind="click: color.bind($data, '#ff0'), css: { yellow: color() == '#ff0'}">
               Yellow
       </button>
       <button class="ui button"
+              title="Green (Alt+G)"
               data-bind="click: color.bind($data, '#0f0'), css: { green: color() == '#0f0'}">
               Green
       </button>
@@ -54,7 +57,7 @@
               data-bind="click: save, css: { loading: isSaving, disabled: isSaved }">
         <i class="save icon"></i>
       </button>
-      <button class="ui teal button"
+      <button class="ui teal button" title="Finish this assignment"
               data-bind="click: finalize, css: { loading: isFinalizing, disabled: !canFinalize() }">
         <i class="checkmark icon"></i>
       </button>
