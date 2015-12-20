@@ -36,7 +36,7 @@
     "moment": "^2.10.6",
     "pdfjs-dist": "^1.1.387",
     "q": "^1.4.1",
-    "scribble.js": "lemaik/scribble.js#v1.4.0"
+    "scribble.js": "lemaik/scribble.js#v1.4.2"
   },
   "devDependencies": {
     "brfs": "^1.4.0",
