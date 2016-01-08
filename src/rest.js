@@ -16,7 +16,7 @@ module.exports = function(DB){
       return DB.Corrections.getPDFForID(solution_id).then(function(pdf){
         res.setHeader('Content-disposition', 'attachment; filename=' + solution_id + '.pdf');
         res.setHeader('Content-type', 'application/pdf');
-        if(pdf && pdf != "" && false){
+        if(pdf && pdf != ""){
           res.send(pdf);
         } else {
           res.send(fs.readFileSync(path.normalize(__dirname + "/../test.pdf")));
