@@ -48,18 +48,18 @@
     </div>
     <div class="ui four wide column">
       <div class="ui segment">
-        <h3 class="ui header">Unvollst&auml;ndige Korrekturen</h3>
+        <h3 class="ui header">Nicht abgeschlossene Korrekturen</h3>
         <div class="ui list" data-bind="foreach: lockedCorrections">
           <div class="item" data-bind="click: show">
               <i class="large write middle aligned icon"></i>
               <div class="content">
-                <a class="header">Exercise <span data-bind="text: exercise.number"></span></a>
+                <a class="header"><span data-bind="text: exercise().title"></span>, #<span data-bind="text: hash"></span></a>
                 <div class="description">Started <span data-bind="text: lockDateText"></span></div>
               </div>
             </div>
         </div>
         <div class="ui center aligned basic segment" data-bind="visible: lockedCorrections().length == 0">
-          Du hast derzeit keine unvollst&auml;ndligen Korrekturen.
+          Du hast derzeit keine nicht abgeschlossenen Korrekturen.
         </div>
       </div>
     </div>

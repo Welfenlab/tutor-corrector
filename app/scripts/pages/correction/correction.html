@@ -1,19 +1,23 @@
-<div class="correction" data-bind="template: { afterRender: onShow }">
+<div class="correction" data-bind="template: { afterRender: onShow, beforeRemove: onHide }">
   <div class="toolbar" data-bind="visible: exercise()">
     <div class="ui icon buttons">
       <button class="ui button"
+              title="Pen (Alt+1)"
               data-bind="click: tool.bind($data, 'marker'), css: { active: tool() == 'marker'}">
         <i class="write icon"></i>
       </button>
       <button class="ui button"
+              title="Highlighter (Alt+2)"
               data-bind="click: tool.bind($data, 'highlighter'), css: { active: tool() == 'highlighter'}">
       <i class="paint brush icon"></i>
       </button>
       <button class="ui button"
+              title="Text (Alt+3)"
               data-bind="click: tool.bind($data, 'text'), css: { active: tool() == 'text'}">
       <i class="font icon"></i>
       </button>
       <button class="ui button"
+              title="Eraser (Alt+4)"
               data-bind="click: tool.bind($data, 'eraser'), css: { active: tool() == 'eraser'}">
         <i class="erase icon"></i>
       </button>
@@ -21,14 +25,17 @@
 
     <div class="ui buttons">
       <button class="ui button"
+              title="Red (Alt+R)"
               data-bind="click: color.bind($data, '#f00'), css: { red: color() == '#f00'}">
               Red
       </button>
       <button class="ui button"
+              title="Yellow (Alt+Y)"
               data-bind="click: color.bind($data, '#ff0'), css: { yellow: color() == '#ff0'}">
               Yellow
       </button>
       <button class="ui button"
+              title="Green (Alt+G)"
               data-bind="click: color.bind($data, '#0f0'), css: { green: color() == '#0f0'}">
               Green
       </button>
@@ -50,7 +57,7 @@
               data-bind="click: save, css: { loading: isSaving, disabled: isSaved }">
         <i class="save icon"></i>
       </button>
-      <button class="ui teal button"
+      <button class="ui teal button" title="Finish this assignment"
               data-bind="click: finalize, css: { loading: isFinalizing, disabled: !canFinalize() }">
         <i class="checkmark icon"></i>
       </button>
@@ -67,14 +74,8 @@
     <div data-bind="template: { afterRender: onShow }" style="display:none"></div>
 
     <div class="column">
-      <div class="ui teal icon button" data-bind="click: prev, css: { disabled: !canGoPrev()}">
-        <i class="left double angle icon"></i>
-      </div>
-    </div>
-
-    <div class="column">
       <strong>
-        Aufgabe <span data-bind="text: task().number"></span> &ndash;
+        Task <span data-bind="text: task().number"></span> &ndash;
         <span data-bind="text: task().title"></span><br/>
       </strong>
 
@@ -92,16 +93,26 @@
           </div>
         </div>
       </div>
+      <div data-bind="visible: tests().length == 0">
+        <em>No tests available for this task.</em>
+      </div>
     </div>
 
     <div class="right column">
-      <div class="ui teal icon button" data-bind="click: next, css: { disabled: !canGoNext()}">
-        <i class="right double angle button icon"></i>
+      <div class="ui buttons">
+        <button class="ui teal icon button" data-bind="click: prev, css: { disabled: !canGoPrev()}">
+          <i class="left angle icon"></i>
+        </button>
+        <button class="ui teal icon button" data-bind="click: next, css: { disabled: !canGoNext()}">
+          <i class="right angle button icon"></i>
+        </button>
       </div>
     </div>
     <div class="right column">
+      Points for <strong>Task <span data-bind="text: task().number"></span></strong>:&nbsp;
       <div class="ui right labeled small input">
-        <input type="number" data-bind="textInput: taskPoints" style="width:60px;padding-right:0">
+        <input type="number" data-bind="textInput: taskPoints, attr: { max: task().maxPoints }"
+               min="0" style="width:60px;padding-right:0">
         <div class="ui basic label">
           / <span data-bind="text: task().maxPoints"></span>
         </div>

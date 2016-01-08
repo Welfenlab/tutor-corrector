@@ -11,9 +11,9 @@ class CorrectionBarViewModel
       return @exercise().tasks
 
     @tests = ko.computed =>
-      if !@solution()
+      if !@solution() or !@solution().tasks[@selectedTaskIndex()]
         return []
-      return @solution().tasks[@selectedTaskIndex()].tests
+      return @solution().tasks[@selectedTaskIndex()].tests || []
 
     @passedTests = ko.computed => _.filter @tests(), 'passes'
 

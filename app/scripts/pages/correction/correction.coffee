@@ -26,7 +26,7 @@ class ViewModel
     @loadSolution = => #load the solution and pdf for the current exercise
       if !@exercise()
         @pages []
-        return
+        return Q.reject()
 
       getSolution = api.get.nextSolution @exercise().id
         .then (solution) => @solution solution
@@ -36,12 +36,12 @@ class ViewModel
     @loadExercise = => #load the exercise and pdf for the current solution
       if !@solution()
         @pages []
-        return
-
+        return Q.reject()
+      console.log 'getting exercise...'
       getExercise = api.get.exercise @solution().exercise
         .then (exercise) => @exercise exercise
 
-      Q.all([getExercise, @loadPdf()]).then => @initPages
+      getExercise.then(=> @loadPdf()).then => @initPages()
 
     @initPages = =>
       result = @solution().result
@@ -70,15 +70,26 @@ class ViewModel
 
   onShow: =>
     $(document).on 'keydown.correction', (event) =>
-      if event.keyCode == 90 and event.ctrlKey #Ctrl+Z
-        if event.shiftKey #Ctrl+Shift+Z
-          @redo()
-        else
-          @undo()
-      else if event.keyCode == 89 and event.ctrlKey #Ctrl+Y
-        @redo()
-      else if event.keyCode == 83 and event.ctrlKey #Ctrl+S
-        @save()
+      if event.ctrlKey
+        switch event.keyCode
+          when 90
+            if event.shiftKey #Ctrl+Shift+Z
+              @redo()
+            else #Ctrl+Z
+              @undo()
+          when 89 then @redo() #Ctrl+Y
+          when 83 then @save() #Ctrl+S
+          else return
+      else if event.altKey
+        switch event.keyCode
+          when 49 then @tool 'marker'      #Alt+1
+          when 50 then @tool 'highlighter' #Alt+2
+          when 51 then @tool 'text'        #Alt+3
+          when 52 then @tool 'eraser'      #Alt+4
+          when 82 then @color '#f00'       #Alt+R
+          when 89 then @color '#ff0'       #Alt+Y
+          when 71 then @color '#0f0'       #Alt+G
+          else return
       else
         return #only preventDefault() if this was a shortcut
       event.preventDefault()
@@ -118,7 +129,7 @@ class ViewModel
       .then (exercise) =>
         @exercise exercise
         @loadSolution()
-      .catch (e) -> 
+      .catch (e) ->
         console.error(e)
         alert 'Could not load this solution.'
     else if @params.solutionId
