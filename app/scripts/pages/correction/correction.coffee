@@ -4,6 +4,7 @@ require 'pdfjs-dist/build/pdf.combined' #defines PDFJS globaly
 scribblejs = require 'scribble.js'
 Q = require 'q'
 _ = require 'lodash'
+app = require '../../app'
 api = require '../../api'
 CorrectionBarViewModel = require './bar'
 
@@ -29,9 +30,14 @@ class ViewModel
         return Q.reject()
 
       getSolution = api.get.nextSolution @exercise().id
-        .then (solution) => @solution solution
+        .then (solution) =>
+          @solution solution
 
-      getSolution.then(=> @loadPdf()).then => @initPages()
+      getSolution.then =>
+        if @solution()
+          @loadPdf().then => @initPages()
+        else
+          $('#noMoreSolutions').modal(closable: false).modal('show')
 
     @loadExercise = => #load the exercise and pdf for the current solution
       if !@solution()
@@ -41,7 +47,7 @@ class ViewModel
       getExercise = api.get.exercise @solution().exercise
         .then (exercise) => @exercise exercise
 
-      getExercise.then(=> @loadPdf()).then => @initPages()
+      getExercise.then(=> @loadPdf()).then(=> @initPages())
 
     @initPages = =>
       result = @solution().result
@@ -235,6 +241,18 @@ class ViewModel
         height: actualWidth / page.width * page.height
         width: actualWidth
       page.scribble.setScale actualWidth / page.width
+
+  gotoOverview: ->
+    $('.ui.modal').modal('hide')
+    app.router.goto 'overview'
+
+  takeBreak: ->
+    window.open _.sample [
+      "https://www.reddit.com/r/ProgrammerHumor"
+      "http://thecodinglove.com/random"
+      "http://c.xkcd.com/random/comic/"
+    ]
+
 
 fs = require 'fs'
 module.exports = ->
