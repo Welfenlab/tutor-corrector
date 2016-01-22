@@ -111,7 +111,7 @@
     <div class="right column">
       Points for <strong>Task <span data-bind="text: task().number"></span></strong>:&nbsp;
       <div class="ui right labeled small input">
-        <input type="number" data-bind="textInput: taskPoints, attr: { max: task().maxPoints }"
+        <input type="number" data-bind="value: taskPoints, attr: { max: task().maxPoints }"
                min="0" style="width:60px;padding-right:0">
         <div class="ui basic label">
           / <span data-bind="text: task().maxPoints"></span>

@@ -28,7 +28,7 @@ class CorrectionBarViewModel
           return {}
         @allPoints()[@selectedTaskIndex()]
       write: (value) =>
-        @allPoints()[@selectedTaskIndex()] = value
+        @allPoints()[@selectedTaskIndex()] = parseInt value
         @allPoints @allPoints()
 
     @canGoNext = ko.computed => @selectedTaskIndex() < @tasks().length - 1
