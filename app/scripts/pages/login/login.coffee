@@ -20,7 +20,7 @@ class ViewModel
     .then (data) =>
       @isLoggingIn no
       app.user ko.mapping.fromJS data
-      app.router.goto 'overview'
+      app.goto 'overview'
     .catch (e) =>
       console.log e
       @isLoggingIn no

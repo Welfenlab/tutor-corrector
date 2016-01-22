@@ -20,6 +20,12 @@ var startServer = function(restAPI){
   config.modules = config.modules.concat([
   ]);
 
+  config.lastModule = function (app, config) {
+    app.get('*', function(req, res) {
+      res.sendFile('index.html', { root: config.app.path });
+    });
+  };
+
   // create the server
   var server = TutorServer(config);
 

@@ -3,11 +3,11 @@ ko = require 'knockout'
 
 correctionComponent = require('./pages/correction/correction')()
 
-$(document).ready ->
+$ ->
   $('.ui.dropdown').dropdown()
   $('.ui.accordion').accordion()
 
-
+  app.route '/', -> app.goto '/overview'
   app.route '/login', component: require('./pages/login/login')(), loginRequired: no
   app.route '/overview', component: require('./pages/overview/overview')()
   app.route '/students', component: require('./pages/students/students')()

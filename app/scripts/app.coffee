@@ -1,13 +1,10 @@
 ko = require 'knockout'
 require 'knockout-mapping'
-i18n = require 'i18next-ko'
 md5 = require 'md5'
 {TutorAppBase} = require '@tutor/app-base'
 api = require './api'
 
-ko.components.register 'page-not-found', template: "<h2>Page not found</h2>"
-
-class ViewModel
+class ViewModel extends TutorAppBase($, ko)
   constructor: ->
     super
       mainElement: '#main'
@@ -25,15 +22,17 @@ class ViewModel
       api.get.me()
       .then (me) =>
         @user ko.mapping.fromJS me
-        @router.goto location.hash.substr(1) #go to the page the user wants to go to
+        @goto(localStorage.getItem('post-login-redirect') || @path())
+        localStorage.removeItem('post-login-redirect')
       .catch (e) =>
-        @router.goto 'login'
+        localStorage.setItem('post-login-redirect', @path())
+        @goto 'login'
 
   logout: ->
     api.post.logout()
     .then =>
       @user {}
-      @router.goto 'login'
+      @goto 'login'
 
   registerPopup: ->
     $('.button').popup(position: 'bottom right', hoverable: true)

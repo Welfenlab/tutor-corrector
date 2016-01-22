@@ -244,7 +244,7 @@ class ViewModel
 
   gotoOverview: ->
     $('.ui.modal').modal('hide')
-    app.router.goto 'overview'
+    app.goto 'overview'
 
   takeBreak: ->
     window.open _.sample [
