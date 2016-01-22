@@ -23,8 +23,12 @@ module.exports = function(DB){
         }
       });
     }, apiMethod: "getResByParam", param:"solution" },
-    { path: '/api/correction/finish', dataCall: DB.Corrections.finishSolution,
-      apiMethod: "postBySessionUIDAndParam", param: "solution", errStatus: 404 },
+    { path: '/api/correction/finalize', dataCall: function(tutor, solutionId){
+        return DB.Corrections.checkResults(solutionId).then(function(){
+            return DB.Corrections.finishSolution(tutor, solutionId)
+          })
+      },
+      apiMethod: "putBySessionUIDAndParam", param: "solution", errStatus: 400 },
     { path: '/api/correction/unfinished/:exercise', dataCall: DB.Corrections.getUnfinishedSolutionsForTutor,
       apiMethod: "getBySessionUIDAndParam", param: "exercise" },
       { path: '/api/correction/finished/:exercise', dataCall: DB.Corrections.getFinishedSolutionsForTutor,

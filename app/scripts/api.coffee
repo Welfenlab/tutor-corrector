@@ -37,7 +37,7 @@ api =
     correction: (id, results) -> put "/correction/store",
       solution: id
       results: results
-    finalizeCorrection: (id) -> put "/correction/finish",
+    finalizeCorrection: (id) -> put "/correction/finalize",
       solution: id
   post:
     login: (username, password) -> post "/login",
