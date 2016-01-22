@@ -22,7 +22,6 @@ class ViewModel
       app.user ko.mapping.fromJS data
       app.goto 'overview'
     .catch (e) =>
-      console.log e
       @isLoggingIn no
       $('.login').transition('shake')
 

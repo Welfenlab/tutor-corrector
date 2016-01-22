@@ -9,7 +9,7 @@ class ViewModel extends TutorAppBase($, ko)
     super
       mainElement: '#main'
       translations:
-        en: '../i18n/en'
+        en: require '../i18n/en'
 
     @isActiveObservable = (path) => ko.computed => @isActive(path)
 
