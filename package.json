@@ -15,7 +15,7 @@
   "dependencies": {
     "@more-markdown/code-controls": "^0.1.2",
     "@more-markdown/mathjax-processor": "^0.1.2",
-    "@tutor/app-base": "^2.0.2",
+    "@tutor/app-base": "^2.0.3",
     "@tutor/auth": "1.0.0",
     "@tutor/browser-debug-js": "^0.1.0",
     "@tutor/dummy-auth": "^0.1.9",

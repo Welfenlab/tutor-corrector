@@ -1,4 +1,4 @@
-{get, put, post, del} = require('@tutor/app-base').api
+{get, put, post, del, address} = require('@tutor/app-base').api
 
 api =
   get:
