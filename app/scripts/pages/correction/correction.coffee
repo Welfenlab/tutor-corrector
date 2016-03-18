@@ -45,19 +45,18 @@ class ViewModel
       if !@solution()
         @pages []
         return Q.reject()
-      console.log 'getting exercise...'
       getExercise = api.get.exercise @solution().exercise
         .then (exercise) => @exercise exercise
 
       getExercise.then(=> @loadPdf()).then(=> @initPages())
 
     @initPages = =>
-      result = @solution().result
+      results = @solution().results
       @points new Array(@solution().tasks.length)
-      if result
-        @points result.points
+      if results
+        @points results.points
         for page,i in @pages()
-          page.scribble.loadShapes(result.pages[i].shapes || [], true)
+          page.scribble.loadShapes(results.pages[i].shapes || [], true)
       @isSaved true
 
     @isSaving = ko.observable false
