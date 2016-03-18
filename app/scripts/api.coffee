@@ -1,26 +1,4 @@
-host = window.location.host;
-proto = window.location.protocol;
-address = proto + '//'+host+'/api'
-Q = require 'q'
-
-ajax = (method, url, data) ->
-  Q $.ajax
-    url: address + url
-    data: data
-    method: method
-
-ajaxJson = (method, url, data) ->
-  Q $.ajax
-    url: address + url
-    data: JSON.stringify data
-    contentType: 'application/json; charset=utf-8'
-    dataType: 'json'
-    method: method
-
-get = ajax.bind undefined, 'GET'
-put = ajaxJson.bind undefined, 'PUT'
-post = ajaxJson.bind undefined, 'POST'
-del = ajax.bind undefined, 'DELETE'
+{get, put, post, del, address} = require('@tutor/app-base').api
 
 api =
   get:

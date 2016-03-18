@@ -21,7 +21,7 @@
     <link rel="apple-touch-icon-precomposed" href="img/icon-57.png"/>
 
     <!-- MathJax -->
-    <script src="vendor/jailed/lib/jailed.js"></script>
+    <script src="/vendor/jailed/lib/jailed.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script>
       MathJax.Hub.Config({
@@ -56,11 +56,11 @@
         <div class="computer tablet only row">
             <div class="ui column">
                 <div class="ui inverted teal menu navbar">
-                    <a href="#overview" class="ui brand item">
+                    <a href="/overview" class="ui brand item">
                       <i class="student icon"></i>
                       Tutor Corrector
                     </a>
-                    <a href="#overview" class="ui item" data-bind="css: { active: isActive('overview') }">
+                    <a href="/overview" class="ui item" data-bind="css: { active: isActiveObservable('overview') }">
                         <i class="list icon"></i>
                         Overview
                     </a>
@@ -93,11 +93,11 @@
                           <div class="ui dropdown link item">
                             <i class="content icon"></i>
                             <div class="menu">
-                                <a href="#" class="ui item" data-bind="css: { active: isActive('login') }">
+                                <a href="/" class="ui item" data-bind="css: { active: isActiveObservable('login') }">
                                     <i class="sign in icon"></i>
                                     Login
                                 </a>
-                                <a href="#overview" class="ui item" data-bind="css: { active: isActive('overview') }">
+                                <a href="/overview" class="ui item" data-bind="css: { active: isActiveObservable('overview') }">
                                     <i class="list icon"></i>
                                     Overview
                                 </a>
@@ -108,11 +108,11 @@
             </div>
         </div>
     </div>
-    <!-- ko if: router.selected() -->
-    <div class="content" data-bind="component: { name: router.selected, params: router.parameters }"></div>
+    <!-- ko if: page() && (!pageRequiresLogin() || isLoggedIn()) -->
+    <div class="content" id="main" data-bind="component: { name: page, params: pageParams }"></div>
     <!-- /ko -->
 </div>
 
-<script src="corrector.js"></script>
+<script src="/corrector.js"></script>
 </body>
 </html>

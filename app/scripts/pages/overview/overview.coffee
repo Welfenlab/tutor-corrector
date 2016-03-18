@@ -17,7 +17,7 @@ class ExerciseCard
       is: data.is
     @contingent.ratio = @contingent.is / Math.ceil data.should
 
-  correct: -> app.router.goto "correction/#{@exercise.id()}"
+  correct: -> app.goto "correction/#{@exercise.id()}"
 
 class UnfinishedCorrection
   constructor: (data) ->
@@ -28,7 +28,7 @@ class UnfinishedCorrection
     @hash = data.id.substr(0, 8)
 
   show: ->
-    app.router.goto "correction/by-solution/#{@correction.id}"
+    app.goto "correction/by-solution/#{@correction.id}"
 
 class ViewModel
   constructor: ->
