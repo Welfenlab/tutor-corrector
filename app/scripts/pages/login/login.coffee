@@ -3,7 +3,7 @@ app = require '../../app'
 api = require '../../api'
 
 class ViewModel
-  constructor: ->
+  constructor: ->    
     @username = ko.observable 'max'
     @password = ko.observable 'abc'
 
