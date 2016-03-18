@@ -18,8 +18,10 @@ class ViewModel
     @color = ko.observable()
     @tool = ko.observable('marker')
 
+    @isLoading = ko.observable(true)
     @exercise = ko.observable()
     @solution = ko.observable()
+    @isCorrecting = ko.computed => !@isLoading() && @exercise() && @solution()
     @points = ko.observable()
     @points.subscribe => @isSaved false
     @correctionBar = new CorrectionBarViewModel @exercise, @solution, @points
@@ -135,7 +137,9 @@ class ViewModel
       .then (exercise) =>
         @exercise exercise
         @loadSolution()
-      .catch (e) ->
+        .then => @isLoading(false)
+      .catch (e) =>
+        @isLoading(false)
         console.error(e)
         alert 'Could not load this solution.'
     else if @params.solutionId
@@ -143,7 +147,9 @@ class ViewModel
       .then (solution) =>
         @solution solution
         @loadExercise()
-      .catch (e) ->
+        .then => @isLoading(false)
+      .catch (e) =>
+        @isLoading(false)
         console.error(e)
         alert 'Could not load this solution.'
 

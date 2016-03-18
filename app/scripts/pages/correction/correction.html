@@ -1,5 +1,11 @@
 <div class="correction" data-bind="template: { afterRender: onShow, beforeRemove: onHide }">
-  <div class="toolbar" data-bind="visible: exercise()">
+  <!-- ko if: isLoading -->
+  <div class="ui active inverted dimmer">
+    <div class="ui text loader">Loading</div>
+  </div>
+  <!-- /ko -->
+
+  <div class="toolbar" data-bind="visible: isCorrecting()">
     <div class="ui icon buttons">
       <button class="ui button"
               title="Pen (Alt+1)"
@@ -70,7 +76,7 @@
   </div>
   <!-- /ko -->
 
-  <div class="bar" data-bind="with: correctionBar, visible: exercise()">
+  <div class="bar" data-bind="with: correctionBar, visible: isCorrecting()">
     <div data-bind="template: { afterRender: onShow }" style="display:none"></div>
 
     <div class="column">
