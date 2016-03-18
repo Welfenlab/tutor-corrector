@@ -22,7 +22,7 @@ class ViewModel extends TutorAppBase($, ko)
       api.get.me()
       .then (me) =>
         @user ko.mapping.fromJS me
-        @goto(localStorage.getItem('post-login-redirect') || @path())
+        @goto(localStorage.getItem('post-login-redirect') || @path(), true)
         localStorage.removeItem('post-login-redirect')
       .catch (e) =>
         localStorage.setItem('post-login-redirect', @path())
