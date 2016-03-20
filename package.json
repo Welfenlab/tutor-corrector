@@ -21,7 +21,6 @@
     "@tutor/dummy-auth": "^0.1.9",
     "@tutor/exercise-editor": "^0.1.2",
     "@tutor/javascript-editor-errors": "^0.1.2",
-    "@tutor/login-form": "^0.1.1",
     "@tutor/markdown-editor": "^0.1.3",
     "@tutor/rethinkdb-database": "^0.5.14",
     "@tutor/server": "^0.3.3",
